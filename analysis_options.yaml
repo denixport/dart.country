@@ -1,0 +1,44 @@
+include: package:pedantic/analysis_options.yaml
+
+analyzer:
+  strong-mode:
+    implicit-casts: false
+    implicit-dynamic: false
+  errors:
+    dead_code: error
+    missing_required_param: warning
+    missing_return: warning
+    override_on_non_overriding_method: warning
+    todo: info
+    unused_element: error
+    unused_import: warning
+    unused_local_variable: error
+
+linter:
+  rules:
+    - always_declare_return_types
+    - avoid_null_checks_in_equality_operators
+    - await_only_futures
+    - camel_case_types
+    - cancel_subscriptions
+    - comment_references
+    - control_flow_in_finally
+    - directives_ordering
+    - empty_catches
+    - empty_statements
+    - hash_and_equals
+    - implementation_imports
+    - iterable_contains_unrelated_type
+    - library_names
+    - library_prefixes
+    - list_remove_unrelated_type
+    - non_constant_identifier_names
+    - overridden_fields
+    - package_api_docs
+    - prefer_collection_literals
+    - prefer_final_fields
+    - public_member_api_docs
+    - test_types_in_equals
+    - throw_in_finally
+    - type_init_formals
+    - unrelated_type_equality_checks
