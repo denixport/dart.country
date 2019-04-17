@@ -4,7 +4,7 @@ import 'gold.dart';
 
 void main() {
   group('ISO-assigned', () {
-    test('Generated constants are correct', () {
+    test('Generated values are correct', () {
       var lines = isoGold.split("\n");
       for (int i = 0; i < lines.length; i++) {
         var fields = lines[i].split("\t");
@@ -16,6 +16,18 @@ void main() {
         expect(c.isUserAssigned, isFalse);
       }
     });
+
+    test('Generated values are statically accesible', () {
+      var lines = isoGold.split("\n");
+      for (int i = 0; i < lines.length; i++) {
+        var fields = lines[i].split("\t");
+        var c = Country.values[i];
+
+        expect(identical(Country.ofAlphaCode(fields[0]), c), isTrue);
+        expect(identical(Country.ofAlphaCode(fields[1]), c), isTrue);
+        expect(identical(Country.ofNumericCode(int.parse(fields[2])), c), isTrue);
+      }
+    });    
   }); 
 
   group('User-assigned', () {
@@ -55,6 +67,6 @@ void main() {
         expect(() => Country.user(numericCode: code), throwsArgumentError);
       }
     });      
-    
+
   });
 }
