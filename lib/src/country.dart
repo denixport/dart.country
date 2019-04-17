@@ -4,6 +4,10 @@ class Country {
   // 'A' - 1
   static const _baseChar = 0x41 - 1;
 
+  // code units buffer for alpha codes
+  static final _a2cu = <int>[0, 0];
+  static final _a3cu = <int>[0, 0, 0];
+
   // Country alphanumeric codes are packed into 35-bit unsigned integer
   // [0-9] Alpha-2 code, 5 bits per character
   // [10-24] Alpha-3 code, 5 bits per character
@@ -58,16 +62,14 @@ class Country {
 
   /// Alpha-2 code as defined in (ISO 3166-1)[https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2]
   String get alpha2Code {
-    final cu = <int>[0, 0];
-    _unpackAlpha2(_code, cu);
-    return (cu[0] != _baseChar) ? String.fromCharCodes(cu) : "";
+    _unpackAlpha2(_code);
+    return (_a2cu[0] != _baseChar) ? String.fromCharCodes(_a2cu) : "";
   }
 
   /// Alpha-3 code as defined in (ISO 3166-1)[https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3]
   String get alpha3Code {
-    final cu = <int>[0, 0, 0];
-    _unpackAlpha3(_code, cu);
-    return (cu[0] != _baseChar) ? String.fromCharCodes(cu) : "";
+    _unpackAlpha3(_code);
+    return (_a3cu[0] != _baseChar) ? String.fromCharCodes(_a3cu) : "";
   }
 
   /// Numeric code as defined in (ISO 3166-1)[https://en.wikipedia.org/wiki/ISO_3166-1_numeric]
@@ -201,21 +203,17 @@ class Country {
     var cu = code.codeUnits;
     switch (cu.length) {
       case 2:
-        final a2cu = <int>[0, 0];
-
         for (int i = 0; i < values.length; i++) {
-          _unpackAlpha2(values[i]._code, a2cu);
-          if (a2cu[0] == cu[0] && a2cu[1] == cu[1]) {
+          _unpackAlpha2(values[i]._code);
+          if (_a2cu[0] == cu[0] && _a2cu[1] == cu[1]) {
             return i;
           }
         }
         break;
       case 3:
-        final a3cu = <int>[0, 0, 0];
-
         for (int i = 0; i < values.length; i++) {
-          _unpackAlpha3(values[i]._code, a3cu);
-          if (a3cu[0] == cu[0] && a3cu[1] == cu[1] && a3cu[2] == cu[2]) {
+          _unpackAlpha3(values[i]._code);
+          if (_a3cu[0] == cu[0] && _a3cu[1] == cu[1] && _a3cu[2] == cu[2]) {
             return i;
           }
         }
@@ -291,14 +289,14 @@ class Country {
   }
 
   // gets Alpha-2 code units from int
-  static void _unpackAlpha2(int i, List<int> cu) {
+  static void _unpackAlpha2(int i) {
     // hack to avoid 32-bit truncating in JS
     if ((1 << 32) != 0) {
-      cu[0] = _baseChar + ((i >> 30));
+      _a2cu[0] = _baseChar + ((i >> 30));
     } else {
-      cu[0] = _baseChar + (i ~/ 0x40000000);
+      _a2cu[0] = _baseChar + (i ~/ 0x40000000);
     }
-    cu[1] = _baseChar + ((i >> 25) & 0x1F);
+    _a2cu[1] = _baseChar + ((i >> 25) & 0x1F);
   }
 
   static int _packAlpha3(List<int> cu) {
@@ -308,10 +306,10 @@ class Country {
   }
 
   // gets Alpha-2 code units from int
-  static void _unpackAlpha3(int i, List<int> cu) {
-    cu[0] = _baseChar + ((i >> 20) & 0x1F);
-    cu[1] = _baseChar + ((i >> 15) & 0x1F);
-    cu[2] = _baseChar + ((i >> 10) & 0x1F);
+  static void _unpackAlpha3(int i) {
+    _a3cu[0] = _baseChar + ((i >> 20) & 0x1F);
+    _a3cu[1] = _baseChar + ((i >> 15) & 0x1F);
+    _a3cu[2] = _baseChar + ((i >> 10) & 0x1F);
   }
 
   static bool _isInRange(int code, List<int> ranges) {
