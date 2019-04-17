@@ -1,4 +1,8 @@
-import 'pack.dart';
+//import 'pack.dart';
+// 'A' - 1
+const _baseChar = 0x41 - 1;
+
+
 ///
 class Country {
   // Country alphanumeric codes are packed into 35-bit unsigned integer
@@ -9,18 +13,62 @@ class Country {
 
   const Country._(this._code);
 
+  /// Creates user-assigned country 
+  factory Country.user(
+      {String alpha2Code, String alpha3Code, int numericCode}) {
+    assert(!(alpha2Code == null && alpha3Code == null && numericCode == null));
+
+    int a2 = 0;
+    int a3 = 0;
+
+    // checks
+    if (alpha2Code != null) {
+      a2 = _packAlpha2(alpha2Code.codeUnits);
+      if (!_isInRange(a2, _userA2Ranges)) {
+        throw ArgumentError(
+            "Alpha-2 code is not allowed for user-assignement \"alpha2Code\"");
+      }
+    }
+
+    // alpha-2
+    if (alpha3Code != null) {
+      a3 = _packAlpha3(alpha3Code.codeUnits);
+      if (!_isInRange(a3, _userA3Ranges)) {
+        throw ArgumentError(
+            "Alpha-3 code is not allowed for user-assignement \"alpha2Code\"");
+      }
+    }
+
+    // numeric
+    if (numericCode != null && (numericCode < 900 || numericCode > 999)) {
+      throw ArgumentError.value(
+          numericCode, "numericCode", "Should be between 900..999");
+    }
+
+    numericCode ??= 0;
+
+    int code;
+    if ((1 << 32) != 0) {
+      code = a2 | a3 | numericCode;
+    } else {
+      code = a2 + (a3 | numericCode);
+    }
+
+    return Country._(code);
+  }
+
   /// Alpha-2 code as defined in (ISO 3166-1)[https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2]
   String get alpha2Code {
     final cu = <int>[0, 0];
-    unpackAlpha2i(_code, cu);
-    return (cu[0] != baseChar) ? String.fromCharCodes(cu) : "";
+    _unpackAlpha2(_code, cu);
+    return (cu[0] != _baseChar) ? String.fromCharCodes(cu) : "";
   }
 
   /// Alpha-3 code as defined in (ISO 3166-1)[https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3]
   String get alpha3Code {
     final cu = <int>[0, 0, 0];
-    unpackAlpha3i(_code, cu);
-    return (cu[0] != baseChar) ? String.fromCharCodes(cu) : "";
+    _unpackAlpha3(_code, cu);
+    return (cu[0] != _baseChar) ? String.fromCharCodes(cu) : "";
   }
 
   /// Numeric code as defined in (ISO 3166-1)[https://en.wikipedia.org/wiki/ISO_3166-1_numeric]
@@ -106,8 +154,8 @@ class Country {
 
   /// Parses [source] as Alpha-2, alpha-3 or numeric country code.
   /// Same as [parse] but returns `null` in case of invalid country code
-  static Country tryParse(String code) {
-    return _parse(code);
+  static Country tryParse(String source) {
+    return _parse(source);
   }
 
   //
@@ -153,7 +201,7 @@ class Country {
         final a2cu = <int>[0, 0];
 
         for (int i = 0; i < values.length; i++) {
-          unpackAlpha2i(values[i]._code, a2cu);
+          _unpackAlpha2(values[i]._code, a2cu);
           if (a2cu[0] == cu[0] && a2cu[1] == cu[1]) {
             return i;
           }
@@ -163,7 +211,7 @@ class Country {
         final a3cu = <int>[0, 0, 0];
 
         for (int i = 0; i < values.length; i++) {
-          unpackAlpha3i(values[i]._code, a3cu);
+          _unpackAlpha3(values[i]._code, a3cu);
           if (a3cu[0] == cu[0] && a3cu[1] == cu[1] && a3cu[2] == cu[2]) {
             return i;
           }
@@ -186,6 +234,72 @@ class Country {
     }
     return -1;
   }
+
+  /// Clears list of user-assigned countries
+  static void unassignAll() {
+    _userValues.clear();
+  }
+
+
+  // pack/unpack rutines
+
+
+  static int _packAlpha2(List<int> cu) {
+    if ((1 << 32) != 0) {
+      return (cu[0] - _baseChar) << 30 | (cu[1] - _baseChar) << 25;
+    } else {
+      return ((cu[0] - _baseChar) * 0x40000000) + ((cu[1] - _baseChar) << 25);
+    }
+  }  
+
+  // gets Alpha-2 code units from int
+  static void _unpackAlpha2(int i, List<int> cu) {
+    // hack to avoid 32-bit truncating in JS
+    if ((1 << 32) != 0) {
+      cu[0] = _baseChar + ((i >> 30));
+    } else {
+      cu[0] = _baseChar + (i ~/ 0x40000000);
+    }  
+    cu[1] = _baseChar + ((i >> 25) & 0x1F);
+  }
+
+  static int _packAlpha3(List<int> cu) {
+    return (cu[0] - _baseChar) << 20 |
+     (cu[1] - _baseChar) << 15 |
+     (cu[2] - _baseChar) << 10;
+  }  
+
+  // gets Alpha-2 code units from int
+  static void _unpackAlpha3(int i, List<int> cu) {
+    cu[0] = _baseChar + ((i >> 20) & 0x1F);
+    cu[1] = _baseChar + ((i >> 15) & 0x1F);
+    cu[2] = _baseChar + ((i >> 10) & 0x1F);
+  }
+
+  static bool _isInRange(int code, List<int> ranges) {
+    for (int i = 0; i < ranges.length - 1; i += 2) {
+      if (code >= ranges[i] && code <= ranges[i + 1]) {
+        return true;
+      }
+    }
+    return false;
+  }  
+
+  // ranges of user-assignable Alpha-2 codes
+  static const _userA2Ranges = <int>[
+    1107296256, 1107296256, // AA..AA //
+    18689818624, 19126026240, // QM..QZ
+    25803358208, 26642219008, // XA..XZ
+    28789702656, 28789702656, // ZZ..ZZ
+  ];
+
+  // ranges of user-assignable Alpha-3 codes
+  static const _userA3Ranges = <int>[
+    1082368, 1107968, // AAA..AAZ //
+    18252800, 18704384, // QMA..QZZ
+    25199616, 26044416, // XAA..XZZ
+    28115968, 28141568, // ZZA..ZZZ
+  ];
 
   // User-assigned countries
   static final _userValues = <Country>[];  
@@ -691,7 +805,7 @@ class Country {
   static const ZW = Country._(28717061836);
 
 
-  // List of ISO standard values
+  /// List of ISO standard values
   static const values = <Country>[
     AD, AE, AF, AG, AI, AL, AM, AO, AQ, AR, AS, AT, AU, AW, AX, AZ, BA, BB, //
     BD, BE, BF, BG, BH, BI, BJ, BL, BM, BN, BO, BQ, BR, BS, BT, BV, BW, BY, 

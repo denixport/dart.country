@@ -18,4 +18,43 @@ void main() {
     });
   }); 
 
+  group('User-assigned', () {
+    tearDown(() {
+      Country.unassignAll();
+    });
+
+    test('Can create user-assigned country', () {
+      String a2 = "QP";
+      String a3 = "QPX";
+      int n = 910;      
+
+      var c = Country.user(alpha2Code: a2, alpha3Code: a3, numericCode: n);
+
+      expect(c.alpha2Code, a2);
+      expect(c.alpha3Code, a3);
+      expect(c.numericCode, n);
+      expect(c.isUserAssigned, isTrue);      
+
+      // not statically accessible
+      expect(() => Country.ofAlphaCode(a2), throwsArgumentError);
+    });  
+
+    test('Can not create user-assigned country with out of range code', () {
+      const codesA2 = <String>["QL", "ZA"];      
+      for (var code in codesA2) {
+        expect(() => Country.user(alpha2Code: code), throwsArgumentError);
+      }
+
+      const codesA3 = <String>["QLA", "ZAA"];      
+      for (var code in codesA3) {
+        expect(() => Country.user(alpha3Code: code), throwsArgumentError);
+      }
+
+      const codesN = <int>[0, 899, 1000];      
+      for (var code in codesN) {
+        expect(() => Country.user(numericCode: code), throwsArgumentError);
+      }
+    });      
+    
+  });
 }
