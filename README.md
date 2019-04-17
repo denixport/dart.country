@@ -1,3 +1,4 @@
+**[WIP]**
 Library for ISO 3166-1 Coutry codes
 
 ## Usage
@@ -13,4 +14,4 @@ import 'package:country/country.dart';
 
 Please file feature requests and bugs at the [issue tracker][tracker].
 
-[tracker]: http://example.com/issues/replaceme
+[tracker]: https://github.com/denixport/dart.country/issues
