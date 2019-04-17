@@ -41,6 +41,155 @@ class Country {
     return n == 0 || n >= 900;
   }  
 
+  /// Returns country by Alpha-2 or Alpha-3 code
+  /// Throws `ArgumentError` if the [code] is invalid or there is no
+  /// ISO- or user-assigned country for this [code]
+  static Country ofAlphaCode(String code) {
+    int index;
+
+    if (_userValues.isNotEmpty) {
+      index = _parseAlpha(code, _userValues);
+      if (index != -1) {
+        return _userValues[index];
+      }
+    }
+
+    index = _parseAlpha(code, values);
+    if (index != -1) {
+      return values[index];
+    }
+
+    throw ArgumentError("No country assigned for alpha code \"$code\"");
+  }
+
+  /// Returns country by numeric code
+  /// Throws `ArgumentError` if the numeric [code] is invalid or there is no
+  /// ISO- or user-assigned country for this [code]
+  static Country ofNumericCode(int code) {
+    int index;
+    if (_userValues.isNotEmpty) {
+      index = _indexOfNum(code, _userValues);
+      if (index != -1) {
+        return _userValues[index];
+      }
+    }
+
+    index = _indexOfNum(code, values);
+    if (index != -1) {
+      return values[index];
+    }
+
+    throw ArgumentError("No country assigned for numeric code \"$code\"");
+  }  
+
+  // returns index of numeric code in values list
+  static int _indexOfNum(int code, List<Country> values) {
+    for (int i = 0; i < values.length; i++) {
+      if (values[i]._code & 0x3ff == code) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  /// Parses [source] as Alpha-2, alpha-3 or numeric country code
+  /// The [source] must be either 2-3 ASCII uppercase letters of alpha code, 
+  /// or 2-3 digits of numeric code
+  /// Throws `FormatException` if the code is not valid country code
+  static Country parse(String source) {
+    Country c = _parse(source);
+    if (c == null) {
+      throw FormatException("Invalid or not assigned code", source);
+    }
+    return c;
+  }
+
+  /// Parses [source] as Alpha-2, alpha-3 or numeric country code.
+  /// Same as [parse] but returns `null` in case of invalid country code
+  static Country tryParse(String code) {
+    return _parse(code);
+  }
+
+  //
+  static Country _parse(String code) {
+    int index;
+
+    // try user-assigned alpha code
+    if (_userValues.isNotEmpty) {
+      index = _parseAlpha(code, _userValues);
+      if (index != -1) {
+        return _userValues[index];
+      }
+    }
+
+    // try ISO alpha code
+    index = _parseAlpha(code, values);
+    if (index != -1) {
+      return values[index];
+    }
+
+    // try user numeric code
+    if (_userValues.isNotEmpty) {
+      index = _parseNum(code, _userValues);
+      if (index != -1) {
+        return _userValues[index];
+      }
+    }
+
+    // try ISO numeric code
+    index = _parseNum(code, values);
+    if (index != -1) {
+      return values[index];
+    }
+
+    return null;
+  }
+
+  // Parses alpha-2 or alpha-3 code, returns -1 for invalid or unassigned
+  static int _parseAlpha(String code, List<Country> values) {
+    var cu = code.codeUnits;
+    switch (cu.length) {
+      case 2:
+        final a2cu = <int>[0, 0];
+
+        for (int i = 0; i < values.length; i++) {
+          unpackAlpha2i(values[i]._code, a2cu);
+          if (a2cu[0] == cu[0] && a2cu[1] == cu[1]) {
+            return i;
+          }
+        }
+        break;
+      case 3:
+        final a3cu = <int>[0, 0, 0];
+
+        for (int i = 0; i < values.length; i++) {
+          unpackAlpha3i(values[i]._code, a3cu);
+          if (a3cu[0] == cu[0] && a3cu[1] == cu[1] && a3cu[2] == cu[2]) {
+            return i;
+          }
+        }
+        break;
+    }
+    return -1;
+  }
+
+  // Parses numeric code, returns -1 for invalid or unassigned
+  static int _parseNum(String code, List<Country> values) {
+    int n = int.tryParse(code);
+    if (n == null) {
+      return -1;
+    }
+    for (int i = 0; i < values.length; i++) {
+      if (values[i]._code & 0x3ff == n) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  // User-assigned countries
+  static final _userValues = <Country>[];  
+
   //GENERATED:START
   /// Andorra AD AND 20
   static const AD = Country._(1209470996);
