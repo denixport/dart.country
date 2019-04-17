@@ -1,3 +1,6 @@
+// Copyright (c) 2019, Denis Portnov. All rights reserved.
+// Released under MIT License that can be found in the LICENSE file.
+
 import 'package:country/country.dart';
 import 'package:test/test.dart';
 import 'gold.dart';
@@ -105,7 +108,7 @@ void main() {
       expect(c.isUserAssigned, isTrue);
     });      
 
-    test('Can not assigned country twice', () {
+    test('Can not assigne country more than once', () {
       Function assf = () => 
         Country.assign(alpha2Code: "AA", alpha3Code: "AAA", numericCode: 900);
 
