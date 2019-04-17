@@ -1,9 +1,9 @@
-//import 'pack.dart';
-// 'A' - 1
-const _baseChar = 0x41 - 1;
 
 ///
 class Country {
+  // 'A' - 1
+  static const _baseChar = 0x41 - 1;
+
   // Country alphanumeric codes are packed into 35-bit unsigned integer
   // [0-9] Alpha-2 code, 5 bits per character
   // [10-24] Alpha-3 code, 5 bits per character
@@ -238,7 +238,11 @@ class Country {
     return -1;
   }
 
-  ///
+  /// Assigns user-defined codes. Returns index of country value in [userValues]
+  /// Codes could be any combination of Alpha-2, alpha-2, or numeric code. 
+  /// Either one of 3 codes is required.
+  /// After calling [assign] user-assigned codes are available through
+  /// [parse], [tryParse], [ofAlphaCode], and [ofNumericCode] static methods.
   static int assign({String alpha2Code, String alpha3Code, int numericCode}) {
     assert(!(alpha2Code == null && alpha3Code == null && numericCode == null));
 
@@ -271,7 +275,7 @@ class Country {
     return _userValues.length - 1;
   }
 
-  /// Clears list of user-assigned countries
+  /// Removes all of user-assigned countries
   static void unassignAll() {
     _userValues.clear();
   }
