@@ -1,3 +1,4 @@
+import 'pack.dart';
 ///
 class Country {
   // Country alphanumeric codes are packed into 35-bit unsigned integer
@@ -7,6 +8,38 @@ class Country {
   final int _code;
 
   const Country._(this._code);
+
+  /// Alpha-2 code as defined in (ISO 3166-1)[https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2]
+  String get alpha2Code {
+    final cu = <int>[0, 0];
+    unpackAlpha2i(_code, cu);
+    return (cu[0] != baseChar) ? String.fromCharCodes(cu) : "";
+  }
+
+  /// Alpha-3 code as defined in (ISO 3166-1)[https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3]
+  String get alpha3Code {
+    final cu = <int>[0, 0, 0];
+    unpackAlpha3i(_code, cu);
+    return (cu[0] != baseChar) ? String.fromCharCodes(cu) : "";
+  }
+
+  /// Numeric code as defined in (ISO 3166-1)[https://en.wikipedia.org/wiki/ISO_3166-1_numeric]
+  int get numericCode {
+    return _code & 0x3ff;
+  }
+
+  /// Returns `true` if it's a country with official ISO 3166-1 codes
+  bool get isOfficial {
+    int n = _code & 0x3ff;
+    return n == 0 || n >= 900;
+  } 
+
+  /// Returns `true` if it's a country with user-assigned codes.
+  /// See (User-assigned code elements)[https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#User-assigned_code_elements]
+  bool get isUserAssigned {
+    int n = _code & 0x3ff;
+    return n == 0 || n >= 900;
+  }  
 
   //GENERATED:START
   /// Andorra AD AND 20
