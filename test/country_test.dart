@@ -23,6 +23,7 @@ void main() {
         var fields = lines[i].split("\t");
         var c = Country.values[i];
 
+        expect(identical(Country.parse(fields[1]), c), isTrue);
         expect(identical(Country.ofAlphaCode(fields[0]), c), isTrue);
         expect(identical(Country.ofAlphaCode(fields[1]), c), isTrue);
         expect(identical(Country.ofNumericCode(int.parse(fields[2])), c), isTrue);
@@ -67,6 +68,53 @@ void main() {
         expect(() => Country.user(numericCode: code), throwsArgumentError);
       }
     });      
+
+    test('Can be assigned with Alpha-2 only', () {
+      String a2 = "QP";
+
+      int index = Country.assign(alpha2Code: a2);
+      var c = Country.userValues[index];
+
+      expect(c.alpha2Code, a2);
+      expect(c.alpha3Code, "");
+      expect(c.numericCode, 0);
+      expect(c.isUserAssigned, isTrue);
+    });  
+
+    test('Can be assigned with Alpha-3 only', () {
+      String a3 = "XXZ";
+
+      int index = Country.assign(alpha3Code: a3);
+      var c = Country.userValues[index];
+
+      expect(c.alpha2Code, "");
+      expect(c.alpha3Code, a3);
+      expect(c.numericCode, 0);
+      expect(c.isUserAssigned, isTrue);
+    });  
+
+    test('Can be assigned with numeric only', () {
+      int n = 999;
+
+      int index = Country.assign(numericCode: n);
+      var c = Country.userValues[index];
+
+      expect(c.alpha2Code, "");
+      expect(c.alpha3Code, "");
+      expect(c.numericCode, n);
+      expect(c.isUserAssigned, isTrue);
+    });      
+
+    test('Can not assigned country twice', () {
+      Function assf = () => 
+        Country.assign(alpha2Code: "AA", alpha3Code: "AAA", numericCode: 900);
+
+      // assign first time
+      assf();
+
+      // expect no double assignment
+      expect(assf, throwsArgumentError);
+    });
 
   });
 }
