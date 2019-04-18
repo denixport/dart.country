@@ -24,13 +24,13 @@ void main() {
       var lines = isoGold.split("\n");
       for (int i = 0; i < lines.length; i++) {
         var fields = lines[i].split("\t");
+        var n = int.parse(fields[2]);
         var c = Country.values[i];
 
         expect(identical(Country.parse(fields[1]), c), isTrue);
         expect(identical(Country.ofAlphaCode(fields[0]), c), isTrue);
         expect(identical(Country.ofAlphaCode(fields[1]), c), isTrue);
-        expect(
-            identical(Country.ofNumericCode(int.parse(fields[2])), c), isTrue);
+        expect(identical(Country.ofNumericCode(n), c), isTrue);
       }
     });
 
@@ -122,6 +122,14 @@ void main() {
 
       // expect no double assignment
       expect(assf, throwsArgumentError);
+    });
+
+    test('Can be checked for equality', () {
+      var c1 = Country.user(alpha2Code: "ZZ");
+      var c2 = Country.user(alpha2Code: "ZZ");
+
+      expect(identical(c1, c2), isFalse);
+      expect(c1, equals(c2));
     });
 
     test('Can be printed', () {
