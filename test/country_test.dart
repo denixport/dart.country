@@ -29,10 +29,15 @@ void main() {
         expect(identical(Country.parse(fields[1]), c), isTrue);
         expect(identical(Country.ofAlphaCode(fields[0]), c), isTrue);
         expect(identical(Country.ofAlphaCode(fields[1]), c), isTrue);
-        expect(identical(Country.ofNumericCode(int.parse(fields[2])), c), isTrue);
+        expect(
+            identical(Country.ofNumericCode(int.parse(fields[2])), c), isTrue);
       }
-    });    
-  }); 
+    });
+
+    test('Can be printed', () {
+      expect(Country.RU.toString(), "Country.RU");
+    });
+  });
 
   group('User-assigned', () {
     tearDown(() {
@@ -42,35 +47,35 @@ void main() {
     test('Can create user-assigned country', () {
       String a2 = "QP";
       String a3 = "QPX";
-      int n = 910;      
+      int n = 910;
 
       var c = Country.user(alpha2Code: a2, alpha3Code: a3, numericCode: n);
 
       expect(c.alpha2Code, a2);
       expect(c.alpha3Code, a3);
       expect(c.numericCode, n);
-      expect(c.isUserAssigned, isTrue);      
+      expect(c.isUserAssigned, isTrue);
 
       // not statically accessible
       expect(() => Country.ofAlphaCode(a2), throwsArgumentError);
-    });  
+    });
 
     test('Can not create user-assigned country with out of range code', () {
-      const codesA2 = <String>["QL", "ZA"];      
+      const codesA2 = <String>["QL", "ZA"];
       for (var code in codesA2) {
         expect(() => Country.user(alpha2Code: code), throwsArgumentError);
       }
 
-      const codesA3 = <String>["QLA", "ZAA"];      
+      const codesA3 = <String>["QLA", "ZAA"];
       for (var code in codesA3) {
         expect(() => Country.user(alpha3Code: code), throwsArgumentError);
       }
 
-      const codesN = <int>[0, 899, 1000];      
+      const codesN = <int>[0, 899, 1000];
       for (var code in codesN) {
         expect(() => Country.user(numericCode: code), throwsArgumentError);
       }
-    });      
+    });
 
     test('Can be assigned with Alpha-2 only', () {
       String a2 = "QP";
@@ -82,7 +87,7 @@ void main() {
       expect(c.alpha3Code, "");
       expect(c.numericCode, 0);
       expect(c.isUserAssigned, isTrue);
-    });  
+    });
 
     test('Can be assigned with Alpha-3 only', () {
       String a3 = "XXZ";
@@ -94,7 +99,7 @@ void main() {
       expect(c.alpha3Code, a3);
       expect(c.numericCode, 0);
       expect(c.isUserAssigned, isTrue);
-    });  
+    });
 
     test('Can be assigned with numeric only', () {
       int n = 999;
@@ -106,11 +111,11 @@ void main() {
       expect(c.alpha3Code, "");
       expect(c.numericCode, n);
       expect(c.isUserAssigned, isTrue);
-    });      
+    });
 
     test('Can not assigne country more than once', () {
-      Function assf = () => 
-        Country.assign(alpha2Code: "AA", alpha3Code: "AAA", numericCode: 900);
+      Function assf = () =>
+          Country.assign(alpha2Code: "AA", alpha3Code: "AAA", numericCode: 900);
 
       // assign first time
       assf();
@@ -119,5 +124,10 @@ void main() {
       expect(assf, throwsArgumentError);
     });
 
+    test('Can be printed', () {
+      expect(Country.user(alpha2Code: "ZZ").toString(), "Country.ZZ");
+      expect(Country.user(alpha3Code: "ZZZ").toString(), "Country.ZZZ");
+      expect(Country.user(numericCode: 999).toString(), "Country.999");
+    });
   });
 }

@@ -92,6 +92,32 @@ class Country {
     return n == 0 || n >= 900;
   }
 
+  /// Returns string representation of Country object.
+  /// Which is `Country.` followed by either alpha-2, alpha-2, or numeric code
+  /// depeding on which code is assigned.
+  /// For ISoO assigned countryes it returns `Country.` + alpha-2 code.
+  String toString() {
+    // 'Country'.codeUnits + 3
+    const cu = <int>[67, 111, 117, 110, 116, 114, 121, 46];
+
+    _unpackAlpha2(_code);
+    if (_a2cu[0] != _baseChar) {
+      return String.fromCharCodes(cu + _a2cu);
+    }
+
+    _unpackAlpha3(_code);
+    if (_a3cu[0] != _baseChar) {
+      return String.fromCharCodes(cu + _a3cu);
+    }
+
+    int n = _code & 0x3ff;
+    if (n != 0) {
+      return String.fromCharCodes(cu + n.toString().padLeft(3, "0").codeUnits);
+    }
+
+    assert(true, "Unreachable code");
+  }
+
   /// List of all user-assigned countries
   // TODO: optimize?
   static List<Country> get userValues => _userValues;
