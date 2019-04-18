@@ -91,11 +91,17 @@ class Country {
     int n = _code & 0x3ff;
     return n == 0 || n >= 900;
   }
+  
+  @override
+  int get hashCode => _code;
+  
+  @override
+  bool operator ==(Object other) => other is Country && _code == other._code;
 
   /// Returns string representation of Country object.
   /// Which is `Country.` followed by either alpha-2, alpha-2, or numeric code
-  /// depeding on which code is assigned.
-  /// For ISoO assigned countryes it returns `Country.` + alpha-2 code.
+  /// depeding on which code is defined.
+  /// For ISO assigned country it returns `Country.` + alpha-2 code.
   String toString() {
     // 'Country'.codeUnits + 3
     const cu = <int>[67, 111, 117, 110, 116, 114, 121, 46];
@@ -115,7 +121,8 @@ class Country {
       return String.fromCharCodes(cu + n.toString().padLeft(3, "0").codeUnits);
     }
 
-    assert(true, "Unreachable code");
+    assert(true, "Unreachable return");
+    return "Country.UNKNOWN";
   }
 
   /// List of all user-assigned countries
@@ -306,9 +313,10 @@ class Country {
     _userValues.clear();
   }
 
-  // pack/unpack rutines
+  // pack/unpack rutines ------------------------------------------------------
 
   static int _packAlpha2(List<int> cu) {
+    // hack to avoid 32-bit truncating in JS
     if ((1 << 32) != 0) {
       return (cu[0] - _baseChar) << 30 | (cu[1] - _baseChar) << 25;
     } else {
