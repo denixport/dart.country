@@ -102,6 +102,7 @@ class Country {
   /// Which is `Country.` followed by either alpha-2, alpha-2, or numeric code
   /// depeding on which code is defined.
   /// For ISO assigned country it returns `Country.` + alpha-2 code.
+  @override
   String toString() {
     // 'Country'.codeUnits + 3
     const cu = <int>[67, 111, 117, 110, 116, 114, 121, 46];
@@ -126,8 +127,7 @@ class Country {
   }
 
   /// List of all user-assigned countries
-  // TODO: optimize?
-  static List<Country> get userValues => _userValues;
+  static List<Country> get userValues => List.unmodifiable(_userValues);
 
   /// Returns country by Alpha-2 or Alpha-3 code
   /// Throws `ArgumentError` if the [code] is invalid or there is no
