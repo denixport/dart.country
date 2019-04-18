@@ -22,6 +22,8 @@ class Country {
   factory Country.user(
       {String alpha2Code, String alpha3Code, int numericCode}) {
     assert(!(alpha2Code == null && alpha3Code == null && numericCode == null));
+    assert(alpha2Code == null || alpha2Code.length >= 2);
+    assert(alpha3Code == null || alpha3Code.length >= 3);
 
     int a2 = 0;
     int a3 = 0;
@@ -147,7 +149,7 @@ class Country {
       return values[index];
     }
 
-    throw ArgumentError("No country assigned for alpha code \"$code\"");
+    throw ArgumentError("Code \"$code\" is not assigned");
   }
 
   /// Returns country by numeric code
@@ -187,7 +189,7 @@ class Country {
   static Country parse(String source) {
     Country c = _parse(source);
     if (c == null) {
-      throw FormatException("Invalid or not assigned code", source);
+      throw FormatException("Invalid or non-assigned code", source);
     }
     return c;
   }
