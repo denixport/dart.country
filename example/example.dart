@@ -4,6 +4,7 @@ void main() {
   // All ISO country codes are accesible via constants
   print(Country.US.alpha3Code); // -> USA
   print(Country.US.numericCode); // -> 840
+  print(Country.US.symbol); // -> 🇺🇸
 
   // The list of countries with ISO-assigned codes are in Country.values
   var list = Country.values.map<String>((Country c) => c.alpha2Code).join(", ");

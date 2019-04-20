@@ -81,10 +81,20 @@ class Country {
     return _code & 0x3ff;
   }
 
+  ///
+  String get symbol {
+    const int base = 0x1f1a5;
+    
+    if (_code & 0x3ff != 0) {
+      _unpackAlpha2(_code);
+      return String.fromCharCodes(<int>[base + _a2cu[0], base + _a2cu[1]]);
+    }
+    return "";   
+  }
+
   /// Returns `true` if it's a country with official ISO 3166-1 codes
   bool get isOfficial {
-    int n = _code & 0x3ff;
-    return n == 0 || n >= 900;
+    return _code & 0x3ff < 900;
   }
 
   /// Returns `true` if it's a country with user-assigned codes.
