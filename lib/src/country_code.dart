@@ -146,7 +146,7 @@ class CountryCode {
   /// Returns country by Alpha-2 or Alpha-3 code
   /// Throws `ArgumentError` if the [code] is invalid or there is no
   /// ISO- or user-assigned country for this [code]
-  static CountryCode ofAlphaCode(String code) {
+  static CountryCode ofAlpha(String code) {
     int index;
 
     if (_userValues.isNotEmpty) {
@@ -167,7 +167,7 @@ class CountryCode {
   /// Returns country code by numeric code
   /// Throws `ArgumentError` if the numeric [code] is invalid or there is no
   /// ISO- or user-assigned country for this [code]
-  static CountryCode ofNumericCode(int code) {
+  static CountryCode ofNumeric(int code) {
     int index;
     if (_userValues.isNotEmpty) {
       index = _indexOfNum(code, _userValues);
@@ -289,7 +289,7 @@ class CountryCode {
   /// Codes could be any combination of Alpha-2, alpha-2, or numeric code.
   /// Either one of 3 codes is required.
   /// After calling [assign] user-assigned codes are available through
-  /// [parse], [tryParse], [ofAlphaCode], and [ofNumericCode] static methods.
+  /// [parse], [tryParse], [ofAlpha], and [ofNumeric] static methods.
   static int assign({String alpha2, String alpha3, int numeric}) {
     assert(!(alpha2 == null && alpha3 == null && numeric == null));
 

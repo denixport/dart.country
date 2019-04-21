@@ -22,8 +22,8 @@ void main() {
   print(CountryCode.userValues); // -> [Country.XXA]
 
   c1 = CountryCode.userValues[index];
-  c2 = CountryCode.ofAlphaCode("XAA");
-  c3 = CountryCode.ofNumericCode(901);
+  c2 = CountryCode.ofAlpha("XAA");
+  c3 = CountryCode.ofNumeric(901);
   c4 = CountryCode.parse("XAA");
   c5 = CountryCode.parse("901");
 

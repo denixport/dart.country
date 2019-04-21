@@ -28,9 +28,9 @@ void main() {
         var c = CountryCode.values[i];
 
         expect(identical(CountryCode.parse(fields[1]), c), isTrue);
-        expect(identical(CountryCode.ofAlphaCode(fields[0]), c), isTrue);
-        expect(identical(CountryCode.ofAlphaCode(fields[1]), c), isTrue);
-        expect(identical(CountryCode.ofNumericCode(n), c), isTrue);
+        expect(identical(CountryCode.ofAlpha(fields[0]), c), isTrue);
+        expect(identical(CountryCode.ofAlpha(fields[1]), c), isTrue);
+        expect(identical(CountryCode.ofNumeric(n), c), isTrue);
       }
     });
 
@@ -57,7 +57,7 @@ void main() {
       expect(c.isUserAssigned, isTrue);
 
       // not statically accessible
-      expect(() => CountryCode.ofAlphaCode(a2), throwsArgumentError);
+      expect(() => CountryCode.ofAlpha(a2), throwsArgumentError);
     });
 
     test('Can not create user-assigned country with out of range code', () {
