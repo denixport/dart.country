@@ -64,18 +64,21 @@ class CountryCode {
   }
 
   /// Alpha-2 code as defined in (ISO 3166-1)[https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2]
+  /// Returns empty string for user-assigned values that doesn't have alpha-2 code
   String get alpha2 {
     _unpackAlpha2(_code);
     return (_a2cu[0] != _baseChar) ? String.fromCharCodes(_a2cu) : "";
   }
 
   /// Alpha-3 code as defined in (ISO 3166-1)[https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3]
+  /// Returns empty string for user-assigned values that doesn't have alpha-3 code
   String get alpha3 {
     _unpackAlpha3(_code);
     return (_a3cu[0] != _baseChar) ? String.fromCharCodes(_a3cu) : "";
   }
 
   /// Numeric code as defined in (ISO 3166-1)[https://en.wikipedia.org/wiki/ISO_3166-1_numeric]
+  /// Returns 0 for user-assigned values that doesn't have alpha-3 code
   int get numeric {
     return _code & 0x3ff;
   }
@@ -83,15 +86,14 @@ class CountryCode {
   ///
   String get symbol {
     const int base = 0x1f1a5;
-    
     if (_code & 0x3ff != 0) {
       _unpackAlpha2(_code);
       return String.fromCharCodes(<int>[base + _a2cu[0], base + _a2cu[1]]);
     }
-    return "";   
+    return "";
   }
 
-  /// Returns `true` if it's a country with official ISO 3166-1 codes
+  /// Returns `true` if the code is official ISO-assigned
   bool get isOfficial {
     return _code & 0x3ff < 900;
   }
@@ -102,17 +104,18 @@ class CountryCode {
     int n = _code & 0x3ff;
     return n == 0 || n >= 900;
   }
-  
+
   @override
   int get hashCode => _code;
-  
-  @override
-  bool operator ==(Object other) => other is CountryCode && _code == other._code;
 
-  /// Returns string representation of Country object.
-  /// Which is `Country.` followed by either alpha-2, alpha-2, or numeric code
+  @override
+  bool operator ==(Object other) =>
+      other is CountryCode && _code == other._code;
+
+  /// Returns string representation of CountryCode object.
+  /// Which is `CountryCode.` followed by either alpha-2, alpha-2, or numeric code
   /// depeding on which code is defined.
-  /// For ISO assigned country it returns `Country.` + alpha-2 code.
+  /// For ISO-assigned country codes it alwais returns `CountryCode.` + alpha-2.
   @override
   String toString() {
     // 'Country'.codeUnits + 3
@@ -137,7 +140,7 @@ class CountryCode {
     return "Country.UNKNOWN";
   }
 
-  /// List of all user-assigned countries
+  /// List of all user-assigned country codes
   static List<CountryCode> get userValues => List.unmodifiable(_userValues);
 
   /// Returns country by Alpha-2 or Alpha-3 code
@@ -161,7 +164,7 @@ class CountryCode {
     throw ArgumentError("Code \"$code\" is not assigned");
   }
 
-  /// Returns country by numeric code
+  /// Returns country code by numeric code
   /// Throws `ArgumentError` if the numeric [code] is invalid or there is no
   /// ISO- or user-assigned country for this [code]
   static CountryCode ofNumericCode(int code) {
@@ -283,7 +286,7 @@ class CountryCode {
   }
 
   /// Assigns user-defined codes. Returns index of country value in [userValues]
-  /// Codes could be any combination of Alpha-2, alpha-2, or numeric code. 
+  /// Codes could be any combination of Alpha-2, alpha-2, or numeric code.
   /// Either one of 3 codes is required.
   /// After calling [assign] user-assigned codes are available through
   /// [parse], [tryParse], [ofAlphaCode], and [ofNumericCode] static methods.
@@ -311,10 +314,8 @@ class CountryCode {
       throw StateError("Numeric code \"$numeric\" is already assigned");
     }
 
-    _userValues.add(CountryCode.user(
-        alpha2: alpha2,
-        alpha3: alpha3,
-        numeric: numeric));
+    _userValues.add(
+        CountryCode.user(alpha2: alpha2, alpha3: alpha3, numeric: numeric));
 
     return _userValues.length - 1;
   }
