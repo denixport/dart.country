@@ -5,9 +5,9 @@ void main() {
 
   // Create values with custom codes (From ISO defined code range)
   c1 = CountryCode.user(alpha2Code: "AA");
-  print(c1.alpha2Code); // -> AA
-  print(c1.alpha3Code); // -> 
-  print(c1.numericCode); // -> 0
+  print(c1.alpha2); // -> AA
+  print(c1.alpha3); // -> 
+  print(c1.numeric); // -> 0
   
   // Country values for the same code are equal, but not the same object
   c1 = CountryCode.user(alpha3Code: "XAA");

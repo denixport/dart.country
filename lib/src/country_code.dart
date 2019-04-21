@@ -65,19 +65,19 @@ class CountryCode {
   }
 
   /// Alpha-2 code as defined in (ISO 3166-1)[https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2]
-  String get alpha2Code {
+  String get alpha2 {
     _unpackAlpha2(_code);
     return (_a2cu[0] != _baseChar) ? String.fromCharCodes(_a2cu) : "";
   }
 
   /// Alpha-3 code as defined in (ISO 3166-1)[https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3]
-  String get alpha3Code {
+  String get alpha3 {
     _unpackAlpha3(_code);
     return (_a3cu[0] != _baseChar) ? String.fromCharCodes(_a3cu) : "";
   }
 
   /// Numeric code as defined in (ISO 3166-1)[https://en.wikipedia.org/wiki/ISO_3166-1_numeric]
-  int get numericCode {
+  int get numeric {
     return _code & 0x3ff;
   }
 

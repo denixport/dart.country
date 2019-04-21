@@ -13,9 +13,9 @@ void main() {
         var fields = lines[i].split("\t");
         var c = CountryCode.values[i];
 
-        expect(c.alpha2Code, fields[0]);
-        expect(c.alpha3Code, fields[1]);
-        expect(c.numericCode, int.parse(fields[2]));
+        expect(c.alpha2, fields[0]);
+        expect(c.alpha3, fields[1]);
+        expect(c.numeric, int.parse(fields[2]));
         expect(c.isUserAssigned, isFalse);
       }
     });
@@ -51,9 +51,9 @@ void main() {
 
       var c = CountryCode.user(alpha2Code: a2, alpha3Code: a3, numericCode: n);
 
-      expect(c.alpha2Code, a2);
-      expect(c.alpha3Code, a3);
-      expect(c.numericCode, n);
+      expect(c.alpha2, a2);
+      expect(c.alpha3, a3);
+      expect(c.numeric, n);
       expect(c.isUserAssigned, isTrue);
 
       // not statically accessible
@@ -83,9 +83,9 @@ void main() {
       int index = CountryCode.assign(alpha2Code: a2);
       var c = CountryCode.userValues[index];
 
-      expect(c.alpha2Code, a2);
-      expect(c.alpha3Code, "");
-      expect(c.numericCode, 0);
+      expect(c.alpha2, a2);
+      expect(c.alpha3, "");
+      expect(c.numeric, 0);
       expect(c.isUserAssigned, isTrue);
     });
 
@@ -95,9 +95,9 @@ void main() {
       int index = CountryCode.assign(alpha3Code: a3);
       var c = CountryCode.userValues[index];
 
-      expect(c.alpha2Code, "");
-      expect(c.alpha3Code, a3);
-      expect(c.numericCode, 0);
+      expect(c.alpha2, "");
+      expect(c.alpha3, a3);
+      expect(c.numeric, 0);
       expect(c.isUserAssigned, isTrue);
     });
 
@@ -107,9 +107,9 @@ void main() {
       int index = CountryCode.assign(numericCode: n);
       var c = CountryCode.userValues[index];
 
-      expect(c.alpha2Code, "");
-      expect(c.alpha3Code, "");
-      expect(c.numericCode, n);
+      expect(c.alpha2, "");
+      expect(c.alpha3, "");
+      expect(c.numeric, n);
       expect(c.isUserAssigned, isTrue);
     });
 
