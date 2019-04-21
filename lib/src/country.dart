@@ -295,21 +295,21 @@ class Country {
     if (alpha2Code != null &&
         (_parseAlpha(alpha2Code, _userValues) != -1 ||
             _parseAlpha(alpha2Code, values) != -1)) {
-      throw ArgumentError("Alpha-2 code \"$alpha2Code\" is already assigned");
+      throw StateError("Alpha-2 code \"$alpha2Code\" is already assigned");
     }
 
     // check Alpha-3
     if (alpha3Code != null &&
         (_parseAlpha(alpha3Code, _userValues) != -1 ||
             _parseAlpha(alpha3Code, values) != -1)) {
-      throw ArgumentError("Alpha-3 code \"$alpha3Code\" is already assigned");
+      throw StateError("Alpha-3 code \"$alpha3Code\" is already assigned");
     }
 
     // check numeric
     if (numericCode != null &&
         (_indexOfNum(numericCode, _userValues) != -1 ||
             _indexOfNum(numericCode, values) != -1)) {
-      throw ArgumentError("Numeric code \"$numericCode\" is already assigned");
+      throw StateError("Numeric code \"$numericCode\" is already assigned");
     }
 
     _userValues.add(Country.user(

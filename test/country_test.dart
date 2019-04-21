@@ -113,15 +113,9 @@ void main() {
       expect(c.isUserAssigned, isTrue);
     });
 
-    test('Can not assigne country more than once', () {
-      Function assf = () =>
-          Country.assign(alpha2Code: "AA", alpha3Code: "AAA", numericCode: 900);
-
-      // assign first time
-      assf();
-
-      // expect no double assignment
-      expect(assf, throwsArgumentError);
+    test('Can not assign same user code more than once', () {
+      Country.assign(alpha2Code: "XA", alpha3Code: "XAA", numericCode: 900);
+      expect(() => Country.assign(alpha2Code: "XA"), throwsStateError);
     });
 
     test('Can be checked for equality', () {
