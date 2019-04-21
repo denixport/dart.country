@@ -1,4 +1,4 @@
-name: country
+name: country_code
 description: ISO 3166-1 Coutry codes
 version: 0.1.0
 author: Denis Portnov <denixport@gmail.com>

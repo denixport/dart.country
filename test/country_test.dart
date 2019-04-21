@@ -1,7 +1,7 @@
 // Copyright (c) 2019, Denis Portnov. All rights reserved.
 // Released under MIT License that can be found in the LICENSE file.
 
-import 'package:country/country_code.dart';
+import 'package:country_code/country_code.dart';
 import 'package:test/test.dart';
 import 'gold.dart';
 

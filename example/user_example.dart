@@ -1,4 +1,4 @@
-import 'package:country/country_code.dart';
+import 'package:country_code/country_code.dart';
 
 void main() {
   CountryCode c1, c2, c3, c4, c5;

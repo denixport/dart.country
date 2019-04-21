@@ -1,4 +1,4 @@
-import 'package:country/country_code.dart';
+import 'package:country_code/country_code.dart';
 
 void main() {
   // All ISO country codes are accesible via constants
