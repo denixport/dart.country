@@ -19,18 +19,17 @@ class CountryCode {
   const CountryCode._(this._code);
 
   /// Creates user-assigned country
-  factory CountryCode.user(
-      {String alpha2Code, String alpha3Code, int numericCode}) {
-    assert(!(alpha2Code == null && alpha3Code == null && numericCode == null));
-    assert(alpha2Code == null || alpha2Code.length >= 2);
-    assert(alpha3Code == null || alpha3Code.length >= 3);
+  factory CountryCode.user({String alpha2, String alpha3, int numeric}) {
+    assert(!(alpha2 == null && alpha3 == null && numeric == null));
+    assert(alpha2 == null || alpha2.length >= 2);
+    assert(alpha3 == null || alpha3.length >= 3);
 
     int a2 = 0;
     int a3 = 0;
 
     // checks
-    if (alpha2Code != null) {
-      a2 = _packAlpha2(alpha2Code.codeUnits);
+    if (alpha2 != null) {
+      a2 = _packAlpha2(alpha2.codeUnits);
       if (!_isInRange(a2, _userA2Ranges)) {
         throw ArgumentError(
             "Alpha-2 code is not allowed for user-assignement \"alpha2Code\"");
@@ -38,8 +37,8 @@ class CountryCode {
     }
 
     // alpha-2
-    if (alpha3Code != null) {
-      a3 = _packAlpha3(alpha3Code.codeUnits);
+    if (alpha3 != null) {
+      a3 = _packAlpha3(alpha3.codeUnits);
       if (!_isInRange(a3, _userA3Ranges)) {
         throw ArgumentError(
             "Alpha-3 code is not allowed for user-assignement \"alpha2Code\"");
@@ -47,18 +46,18 @@ class CountryCode {
     }
 
     // numeric
-    if (numericCode != null && (numericCode < 900 || numericCode > 999)) {
+    if (numeric != null && (numeric < 900 || numeric > 999)) {
       throw ArgumentError.value(
-          numericCode, "numericCode", "Should be between 900..999");
+          numeric, "numericCode", "Should be between 900..999");
     }
 
-    numericCode ??= 0;
+    numeric ??= 0;
 
     int code;
     if ((1 << 32) != 0) {
-      code = a2 | a3 | numericCode;
+      code = a2 | a3 | numeric;
     } else {
-      code = a2 + (a3 | numericCode);
+      code = a2 + (a3 | numeric);
     }
 
     return CountryCode._(code);
@@ -288,34 +287,34 @@ class CountryCode {
   /// Either one of 3 codes is required.
   /// After calling [assign] user-assigned codes are available through
   /// [parse], [tryParse], [ofAlphaCode], and [ofNumericCode] static methods.
-  static int assign({String alpha2Code, String alpha3Code, int numericCode}) {
-    assert(!(alpha2Code == null && alpha3Code == null && numericCode == null));
+  static int assign({String alpha2, String alpha3, int numeric}) {
+    assert(!(alpha2 == null && alpha3 == null && numeric == null));
 
     // check Alpha-2
-    if (alpha2Code != null &&
-        (_parseAlpha(alpha2Code, _userValues) != -1 ||
-            _parseAlpha(alpha2Code, values) != -1)) {
-      throw StateError("Alpha-2 code \"$alpha2Code\" is already assigned");
+    if (alpha2 != null &&
+        (_parseAlpha(alpha2, _userValues) != -1 ||
+            _parseAlpha(alpha2, values) != -1)) {
+      throw StateError("Alpha-2 code \"$alpha2\" is already assigned");
     }
 
     // check Alpha-3
-    if (alpha3Code != null &&
-        (_parseAlpha(alpha3Code, _userValues) != -1 ||
-            _parseAlpha(alpha3Code, values) != -1)) {
-      throw StateError("Alpha-3 code \"$alpha3Code\" is already assigned");
+    if (alpha3 != null &&
+        (_parseAlpha(alpha3, _userValues) != -1 ||
+            _parseAlpha(alpha3, values) != -1)) {
+      throw StateError("Alpha-3 code \"$alpha3\" is already assigned");
     }
 
     // check numeric
-    if (numericCode != null &&
-        (_indexOfNum(numericCode, _userValues) != -1 ||
-            _indexOfNum(numericCode, values) != -1)) {
-      throw StateError("Numeric code \"$numericCode\" is already assigned");
+    if (numeric != null &&
+        (_indexOfNum(numeric, _userValues) != -1 ||
+            _indexOfNum(numeric, values) != -1)) {
+      throw StateError("Numeric code \"$numeric\" is already assigned");
     }
 
     _userValues.add(CountryCode.user(
-        alpha2Code: alpha2Code,
-        alpha3Code: alpha3Code,
-        numericCode: numericCode));
+        alpha2: alpha2,
+        alpha3: alpha3,
+        numeric: numeric));
 
     return _userValues.length - 1;
   }
