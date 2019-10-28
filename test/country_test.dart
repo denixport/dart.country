@@ -35,7 +35,7 @@ void main() {
     });
 
     test('Can be printed', () {
-      expect(CountryCode.RU.toString(), "Country.RU");
+      expect(CountryCode.RU.toString(), "CountryCode.RU");
     });
   });
 

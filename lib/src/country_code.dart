@@ -83,7 +83,7 @@ class CountryCode {
     return _code & 0x3ff;
   }
 
-  ///
+  /// Returns unicode symbol for country code
   String get symbol {
     const int base = 0x1f1a5;
     if (_code & 0x3ff != 0) {
@@ -119,7 +119,7 @@ class CountryCode {
   @override
   String toString() {
     // 'Country'.codeUnits + 3
-    const cu = <int>[67, 111, 117, 110, 116, 114, 121, 46];
+    const cu = <int>[67, 111, 117, 110, 116, 114, 121, 67, 111, 100, 101, 46];
 
     _unpackAlpha2(_code);
     if (_a2cu[0] != _baseChar) {
