@@ -18,7 +18,9 @@ class CountryCode {
 
   const CountryCode._(this._code);
 
-  /// Creates user-assigned country
+  /// Creates user-defined country code.
+  /// Note: Code is not registered in class `values`, use `assign` to 
+  /// register user country codes.
   factory CountryCode.user({String alpha2, String alpha3, int numeric}) {
     assert(!(alpha2 == null && alpha3 == null && numeric == null));
     assert(alpha2 == null || alpha2.length >= 2);
@@ -31,8 +33,7 @@ class CountryCode {
     if (alpha2 != null) {
       a2 = _packAlpha2(alpha2.codeUnits);
       if (!_isInRange(a2, _userA2Ranges)) {
-        throw ArgumentError(
-            "Alpha-2 code is not allowed for user-assignement \"alpha2Code\"");
+        throw ArgumentError("Alpha-2 code is not in allowed range");
       }
     }
 
@@ -40,8 +41,7 @@ class CountryCode {
     if (alpha3 != null) {
       a3 = _packAlpha3(alpha3.codeUnits);
       if (!_isInRange(a3, _userA3Ranges)) {
-        throw ArgumentError(
-            "Alpha-3 code is not allowed for user-assignement \"alpha2Code\"");
+        throw ArgumentError("Alpha-3 code is not in allowed range");
       }
     }
 
@@ -105,6 +105,10 @@ class CountryCode {
     return n == 0 || n >= 900;
   }
 
+  /// Returns position of the value in list of all ISO-assigned country codes.
+  /// 
+  //int get index => values.indexOf(this);
+
   @override
   int get hashCode => _code;
 
@@ -140,6 +144,15 @@ class CountryCode {
     return "Country.UNKNOWN";
   }
 
+  ///
+  static List<CountryCode> get values {
+    if (_userValues.isNotEmpty) {
+      return List<CountryCode>.unmodifiable(_values + _userValues);
+    }
+
+    return List<CountryCode>.unmodifiable(_values);
+  }
+
   /// List of all user-assigned country codes
   static List<CountryCode> get userValues => List.unmodifiable(_userValues);
 
@@ -156,12 +169,12 @@ class CountryCode {
       }
     }
 
-    index = _parseAlpha(code, values);
+    index = _parseAlpha(code, _values);
     if (index != -1) {
-      return values[index];
+      return _values[index];
     }
 
-    throw ArgumentError("Code \"$code\" is not assigned");
+    throw ArgumentError("Alpha code \"$code\" is not assigned");
   }
 
   /// Returns country code by numeric code
@@ -176,9 +189,9 @@ class CountryCode {
       }
     }
 
-    index = _indexOfNum(code, values);
+    index = _indexOfNum(code, _values);
     if (index != -1) {
-      return values[index];
+      return _values[index];
     }
 
     throw ArgumentError("No country assigned for numeric code \"$code\"");
@@ -225,9 +238,9 @@ class CountryCode {
     }
 
     // try ISO alpha code
-    index = _parseAlpha(code, values);
+    index = _parseAlpha(code, _values);
     if (index != -1) {
-      return values[index];
+      return _values[index];
     }
 
     // try user numeric code
@@ -239,9 +252,9 @@ class CountryCode {
     }
 
     // try ISO numeric code
-    index = _parseNum(code, values);
+    index = _parseNum(code, _values);
     if (index != -1) {
-      return values[index];
+      return _values[index];
     }
 
     return null;
@@ -296,28 +309,28 @@ class CountryCode {
     // check Alpha-2
     if (alpha2 != null &&
         (_parseAlpha(alpha2, _userValues) != -1 ||
-            _parseAlpha(alpha2, values) != -1)) {
+            _parseAlpha(alpha2, _values) != -1)) {
       throw StateError("Alpha-2 code \"$alpha2\" is already assigned");
     }
 
     // check Alpha-3
     if (alpha3 != null &&
         (_parseAlpha(alpha3, _userValues) != -1 ||
-            _parseAlpha(alpha3, values) != -1)) {
+            _parseAlpha(alpha3, _values) != -1)) {
       throw StateError("Alpha-3 code \"$alpha3\" is already assigned");
     }
 
     // check numeric
     if (numeric != null &&
         (_indexOfNum(numeric, _userValues) != -1 ||
-            _indexOfNum(numeric, values) != -1)) {
+            _indexOfNum(numeric, _values) != -1)) {
       throw StateError("Numeric code \"$numeric\" is already assigned");
     }
 
     _userValues.add(
         CountryCode.user(alpha2: alpha2, alpha3: alpha3, numeric: numeric));
 
-    return _userValues.length - 1;
+    return _values.length + _userValues.length - 1;
   }
 
   /// Removes all of user-assigned countries
@@ -1136,8 +1149,8 @@ class CountryCode {
   /// Zimbabwe ZW ZWE 716
   static const ZW = CountryCode._(28717061836);
 
-  /// List of ISO standard values
-  static const values = <CountryCode>[
+  // List of ISO standard values
+  static const _values = <CountryCode>[
     AD, AE, AF, AG, AI, AL, AM, AO, AQ, AR, AS, AT, AU, AW, AX, AZ, BA, BB, //
     BD, BE, BF, BG, BH, BI, BJ, BL, BM, BN, BO, BQ, BR, BS, BT, BV, BW, BY,
     BZ, CA, CC, CD, CF, CG, CH, CI, CK, CL, CM, CN, CO, CR, CU, CV, CW, CX,
