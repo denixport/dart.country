@@ -17,6 +17,8 @@ void main() {
         expect(c.alpha3, fields[1]);
         expect(c.numeric, int.parse(fields[2]));
         expect(c.isUserAssigned, isFalse);
+
+        expect(identical(CountryCode.values[c.index], c), isTrue);
       }
     });
 
@@ -37,6 +39,7 @@ void main() {
     test('Can be printed', () {
       expect(CountryCode.RU.toString(), "CountryCode.RU");
     });
+
   });
 
   group('User-assigned', () {
