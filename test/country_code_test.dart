@@ -84,7 +84,7 @@ void main() {
       String a2 = "QP";
 
       int index = CountryCode.assign(alpha2: a2);
-      var c = CountryCode.userValues[index];
+      var c = CountryCode.values[index];
 
       expect(c.alpha2, a2);
       expect(c.alpha3, "");
@@ -96,7 +96,7 @@ void main() {
       String a3 = "XXZ";
 
       int index = CountryCode.assign(alpha3: a3);
-      var c = CountryCode.userValues[index];
+      var c = CountryCode.values[index];
 
       expect(c.alpha2, "");
       expect(c.alpha3, a3);
@@ -108,7 +108,7 @@ void main() {
       int n = 999;
 
       int index = CountryCode.assign(numeric: n);
-      var c = CountryCode.userValues[index];
+      var c = CountryCode.values[index];
 
       expect(c.alpha2, "");
       expect(c.alpha3, "");
@@ -130,9 +130,9 @@ void main() {
     });
 
     test('Can be printed', () {
-      expect(CountryCode.user(alpha2: "ZZ").toString(), "Country.ZZ");
-      expect(CountryCode.user(alpha3: "ZZZ").toString(), "Country.ZZZ");
-      expect(CountryCode.user(numeric: 999).toString(), "Country.999");
+      expect(CountryCode.user(alpha2: "ZZ").toString(), "CountryCode.ZZ");
+      expect(CountryCode.user(alpha3: "ZZZ").toString(), "CountryCode.ZZZ");
+      expect(CountryCode.user(numeric: 999).toString(), "CountryCode.999");
     });
   });
 }
