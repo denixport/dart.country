@@ -95,19 +95,19 @@ class CountryCode {
 
   /// Returns `true` if the code is official ISO-assigned
   bool get isOfficial {
-    return _code & 0x3ff < 900;
+    int n = _code & 0x3ff;
+    return n > 0 && n < 900;
   }
 
-  /// Returns `true` if it's a country with user-assigned codes.
+  /// Returns `true` if the code is user-assigned.
   /// See (User-assigned code elements)[https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#User-assigned_code_elements]
   bool get isUserAssigned {
     int n = _code & 0x3ff;
     return n == 0 || n >= 900;
   }
 
-  /// Returns position of the value in list of all ISO-assigned country codes.
-  /// 
-  //int get index => values.indexOf(this);
+  /// Returns position of the value in list of all country codes. 
+  int get index => values.indexOf(this);
 
   @override
   int get hashCode => _code;
