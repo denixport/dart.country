@@ -48,7 +48,7 @@ class CountryCode {
     // numeric
     if (numeric != null && (numeric < 900 || numeric > 999)) {
       throw ArgumentError.value(
-          numeric, "numericCode", "Should be between 900..999");
+        numeric, "numeric", "Should be between 900..999");
     }
 
     numeric ??= 0;
@@ -333,7 +333,7 @@ class CountryCode {
     return _values.length + _userValues.length - 1;
   }
 
-  /// Removes all of user-assigned countries
+  /// Removes all of user-assigned codes
   static void unassignAll() {
     _userValues.clear();
   }
