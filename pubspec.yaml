@@ -1,6 +1,6 @@
 name: country_code
 description: Provides list of ISO 3166-1 coutry codes in enum-like class, as well as parsing and user-assigned code elements
-version: 0.2.0
+version: 0.2.0-beta
 author: Denis Portnov <denixport@gmail.com>
 uploader: Denis Portnov <denixport@gmail.com>
 homepage: https://github.com/denixport/dart.country
