@@ -21,7 +21,7 @@ class CountryCode {
   /// Creates user-defined country code.
   /// Note: Code is not registered in class `values`, use `assign` to 
   /// register user country codes.
-  factory CountryCode.user({String alpha2, String alpha3, int numeric}) {
+  factory CountryCode.user({String? alpha2, String? alpha3, int? numeric}) {
     assert(!(alpha2 == null && alpha3 == null && numeric == null));
     assert(alpha2 == null || alpha2.length >= 2);
     assert(alpha3 == null || alpha3.length >= 3);
@@ -212,7 +212,7 @@ class CountryCode {
   /// or 2-3 digits of numeric code
   /// Throws `FormatException` if the code is not valid country code
   static CountryCode parse(String source) {
-    CountryCode c = _parse(source);
+    CountryCode? c = _parse(source);
     if (c == null) {
       throw FormatException("Invalid or non-assigned code", source);
     }
@@ -221,12 +221,12 @@ class CountryCode {
 
   /// Parses [source] as Alpha-2, alpha-3 or numeric country code.
   /// Same as [parse] but returns `null` in case of invalid country code
-  static CountryCode tryParse(String source) {
+  static CountryCode? tryParse(String source) {
     return _parse(source);
   }
 
   //
-  static CountryCode _parse(String code) {
+  static CountryCode? _parse(String code) {
     int index;
 
     // try user-assigned alpha code
@@ -286,7 +286,7 @@ class CountryCode {
 
   // Parses numeric code, returns -1 for invalid or unassigned
   static int _parseNum(String code, List<CountryCode> values) {
-    int n = int.tryParse(code);
+    int? n = int.tryParse(code);
     if (n == null) {
       return -1;
     }
@@ -303,7 +303,7 @@ class CountryCode {
   /// Either one of 3 codes is required.
   /// After calling [assign] user-assigned codes are available through
   /// [parse], [tryParse], [ofAlpha], and [ofNumeric] static methods.
-  static int assign({String alpha2, String alpha3, int numeric}) {
+  static int assign({String? alpha2, String? alpha3, int? numeric}) {
     assert(!(alpha2 == null && alpha3 == null && numeric == null));
 
     // check Alpha-2
