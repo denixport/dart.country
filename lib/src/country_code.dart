@@ -1,4 +1,4 @@
-// Copyright (c) 2019, Denis Portnov. All rights reserved.
+// Copyright (c) 2019-2021, Denis Portnov. All rights reserved.
 // Released under MIT License that can be found in the LICENSE file.
 
 ///
@@ -19,62 +19,55 @@ class CountryCode {
   const CountryCode._(this._code);
 
   /// Creates user-defined country code.
-  /// Note: Code is not registered in class `values`, use `assign` to 
+  /// Note: Code is not registered in class `values`, use `assign` to
   /// register user country codes.
-  factory CountryCode.user({String alpha2, String alpha3, int numeric}) {
+  factory CountryCode.user({String? alpha2, String? alpha3, int? numeric}) {
     assert(!(alpha2 == null && alpha3 == null && numeric == null));
     assert(alpha2 == null || alpha2.length >= 2);
     assert(alpha3 == null || alpha3.length >= 3);
 
-    int a2 = 0;
-    int a3 = 0;
-
-    // checks
+    var a2 = 0;
     if (alpha2 != null) {
       a2 = _packAlpha2(alpha2.codeUnits);
       if (!_isInRange(a2, _userA2Ranges)) {
-        throw ArgumentError("Alpha-2 code is not in allowed range");
+        throw ArgumentError('Alpha-2 code is not in allowed range');
       }
     }
 
-    // alpha-2
+    var a3 = 0;
     if (alpha3 != null) {
       a3 = _packAlpha3(alpha3.codeUnits);
       if (!_isInRange(a3, _userA3Ranges)) {
-        throw ArgumentError("Alpha-3 code is not in allowed range");
+        throw ArgumentError('Alpha-3 code is not in allowed range');
       }
     }
 
-    // numeric
     if (numeric != null && (numeric < 900 || numeric > 999)) {
       throw ArgumentError.value(
-        numeric, "numeric", "Should be between 900..999");
+          numeric, 'numeric', 'Should be between 900..999');
     }
 
     numeric ??= 0;
 
-    int code;
-    if ((1 << 32) != 0) {
-      code = a2 | a3 | numeric;
-    } else {
-      code = a2 + (a3 | numeric);
+    if ((1 << 32) == 0) {
+      return CountryCode._(a2 + (a3 | numeric));
     }
 
-    return CountryCode._(code);
+    return CountryCode._(a2 | a3 | numeric);
   }
 
   /// Alpha-2 code as defined in (ISO 3166-1)[https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2]
   /// Returns empty string for user-assigned values that doesn't have alpha-2 code
   String get alpha2 {
     _unpackAlpha2(_code);
-    return (_a2cu[0] != _baseChar) ? String.fromCharCodes(_a2cu) : "";
+    return (_a2cu[0] != _baseChar) ? String.fromCharCodes(_a2cu) : '';
   }
 
   /// Alpha-3 code as defined in (ISO 3166-1)[https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3]
   /// Returns empty string for user-assigned values that doesn't have alpha-3 code
   String get alpha3 {
     _unpackAlpha3(_code);
-    return (_a3cu[0] != _baseChar) ? String.fromCharCodes(_a3cu) : "";
+    return (_a3cu[0] != _baseChar) ? String.fromCharCodes(_a3cu) : '';
   }
 
   /// Numeric code as defined in (ISO 3166-1)[https://en.wikipedia.org/wiki/ISO_3166-1_numeric]
@@ -85,28 +78,28 @@ class CountryCode {
 
   /// Returns unicode symbol for country code
   String get symbol {
-    const int base = 0x1f1a5;
+    const base = 0x1f1a5;
     if (_code & 0x3ff != 0) {
       _unpackAlpha2(_code);
       return String.fromCharCodes(<int>[base + _a2cu[0], base + _a2cu[1]]);
     }
-    return "";
+    return '';
   }
 
   /// Returns `true` if the code is official ISO-assigned
   bool get isOfficial {
-    int n = _code & 0x3ff;
+    var n = _code & 0x3ff;
     return n > 0 && n < 900;
   }
 
   /// Returns `true` if the code is user-assigned.
   /// See (User-assigned code elements)[https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#User-assigned_code_elements]
   bool get isUserAssigned {
-    int n = _code & 0x3ff;
+    var n = _code & 0x3ff;
     return n == 0 || n >= 900;
   }
 
-  /// Returns position of the value in list of all country codes. 
+  /// Returns position of the value in list of all country codes.
   int get index => values.indexOf(this);
 
   @override
@@ -116,7 +109,7 @@ class CountryCode {
   bool operator ==(Object other) =>
       other is CountryCode && _code == other._code;
 
-  /// Returns string representation of CountryCode object.
+  /// Returns string representation of `CountryCode`.
   /// Which is `CountryCode.` followed by either alpha-2, alpha-2, or numeric code
   /// depeding on which code is defined.
   /// For ISO-assigned country codes it alwais returns `CountryCode.` + alpha-2.
@@ -135,16 +128,16 @@ class CountryCode {
       return String.fromCharCodes(cu + _a3cu);
     }
 
-    int n = _code & 0x3ff;
+    var n = _code & 0x3ff;
     if (n != 0) {
-      return String.fromCharCodes(cu + n.toString().padLeft(3, "0").codeUnits);
+      return String.fromCharCodes(cu + n.toString().padLeft(3, '0').codeUnits);
     }
 
-    assert(true, "Unreachable return");
-    return "Country.UNKNOWN";
+    assert(true, 'Unreachable return');
+    return 'Country.UNKNOWN';
   }
 
-  ///
+  /// List of all ISO-assigned country codes
   static List<CountryCode> get values {
     if (_userValues.isNotEmpty) {
       return List<CountryCode>.unmodifiable(_values + _userValues);
@@ -174,7 +167,7 @@ class CountryCode {
       return _values[index];
     }
 
-    throw ArgumentError("Alpha code \"$code\" is not assigned");
+    throw ArgumentError('Alpha code \"$code\" is not assigned');
   }
 
   /// Returns country code by numeric code
@@ -194,12 +187,12 @@ class CountryCode {
       return _values[index];
     }
 
-    throw ArgumentError("No country assigned for numeric code \"$code\"");
+    throw ArgumentError('No country assigned for numeric code \"$code\"');
   }
 
   // returns index of numeric code in values list
   static int _indexOfNum(int code, List<CountryCode> values) {
-    for (int i = 0; i < values.length; i++) {
+    for (var i = 0; i < values.length; i++) {
       if (values[i]._code & 0x3ff == code) {
         return i;
       }
@@ -212,24 +205,24 @@ class CountryCode {
   /// or 2-3 digits of numeric code
   /// Throws `FormatException` if the code is not valid country code
   static CountryCode parse(String source) {
-    CountryCode c = _parse(source);
+    var c = _parse(source);
     if (c == null) {
-      throw FormatException("Invalid or non-assigned code", source);
+      throw FormatException('Invalid or non-assigned code', source);
     }
     return c;
   }
 
   /// Parses [source] as Alpha-2, alpha-3 or numeric country code.
   /// Same as [parse] but returns `null` in case of invalid country code
-  static CountryCode tryParse(String source) {
+  static CountryCode? tryParse(String source) {
     return _parse(source);
   }
 
   //
-  static CountryCode _parse(String code) {
+  static CountryCode? _parse(String code) {
     int index;
 
-    // try user-assigned alpha code
+    // first try user-assigned alpha code
     if (_userValues.isNotEmpty) {
       index = _parseAlpha(code, _userValues);
       if (index != -1) {
@@ -265,7 +258,7 @@ class CountryCode {
     var cu = code.codeUnits;
     switch (cu.length) {
       case 2:
-        for (int i = 0; i < values.length; i++) {
+        for (var i = 0; i < values.length; i++) {
           _unpackAlpha2(values[i]._code);
           if (_a2cu[0] == cu[0] && _a2cu[1] == cu[1]) {
             return i;
@@ -273,7 +266,7 @@ class CountryCode {
         }
         break;
       case 3:
-        for (int i = 0; i < values.length; i++) {
+        for (var i = 0; i < values.length; i++) {
           _unpackAlpha3(values[i]._code);
           if (_a3cu[0] == cu[0] && _a3cu[1] == cu[1] && _a3cu[2] == cu[2]) {
             return i;
@@ -286,11 +279,11 @@ class CountryCode {
 
   // Parses numeric code, returns -1 for invalid or unassigned
   static int _parseNum(String code, List<CountryCode> values) {
-    int n = int.tryParse(code);
+    var n = int.tryParse(code);
     if (n == null) {
       return -1;
     }
-    for (int i = 0; i < values.length; i++) {
+    for (var i = 0; i < values.length; i++) {
       if (values[i]._code & 0x3ff == n) {
         return i;
       }
@@ -303,28 +296,28 @@ class CountryCode {
   /// Either one of 3 codes is required.
   /// After calling [assign] user-assigned codes are available through
   /// [parse], [tryParse], [ofAlpha], and [ofNumeric] static methods.
-  static int assign({String alpha2, String alpha3, int numeric}) {
+  static int assign({String? alpha2, String? alpha3, int? numeric}) {
     assert(!(alpha2 == null && alpha3 == null && numeric == null));
 
     // check Alpha-2
     if (alpha2 != null &&
         (_parseAlpha(alpha2, _userValues) != -1 ||
             _parseAlpha(alpha2, _values) != -1)) {
-      throw StateError("Alpha-2 code \"$alpha2\" is already assigned");
+      throw StateError('Alpha-2 code \"$alpha2\" is already assigned');
     }
 
     // check Alpha-3
     if (alpha3 != null &&
         (_parseAlpha(alpha3, _userValues) != -1 ||
             _parseAlpha(alpha3, _values) != -1)) {
-      throw StateError("Alpha-3 code \"$alpha3\" is already assigned");
+      throw StateError('Alpha-3 code \"$alpha3\" is already assigned');
     }
 
     // check numeric
     if (numeric != null &&
         (_indexOfNum(numeric, _userValues) != -1 ||
             _indexOfNum(numeric, _values) != -1)) {
-      throw StateError("Numeric code \"$numeric\" is already assigned");
+      throw StateError('Numeric code \"$numeric\" is already assigned');
     }
 
     _userValues.add(
@@ -374,7 +367,7 @@ class CountryCode {
   }
 
   static bool _isInRange(int code, List<int> ranges) {
-    for (int i = 0; i < ranges.length - 1; i += 2) {
+    for (var i = 0; i < ranges.length - 1; i += 2) {
       if (code >= ranges[i] && code <= ranges[i + 1]) {
         return true;
       }

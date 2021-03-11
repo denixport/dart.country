@@ -6,12 +6,11 @@ analyzer:
     implicit-dynamic: false
   errors:
     dead_code: error
-    missing_required_param: warning
-    missing_return: warning
-    override_on_non_overriding_method: warning
+    missing_required_param: error
+    missing_return: error
     todo: info
     unused_element: error
-    unused_import: warning
+    unused_import: error
     unused_local_variable: error
 
 linter:

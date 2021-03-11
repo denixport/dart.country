@@ -1,5 +1,5 @@
-//Alpha-2  Alpha-2 Numeric 
-const isoGold = """
+//Alpha-2  Alpha-2 Numeric
+const isoGold = '''
 AD	AND	20
 AE	ARE	784
 AF	AFG	4
@@ -248,4 +248,4 @@ YE	YEM	887
 YT	MYT	175
 ZA	ZAF	710
 ZM	ZMB	894
-ZW	ZWE	716""";
+ZW	ZWE	716''';

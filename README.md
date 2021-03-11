@@ -22,11 +22,11 @@ if (code == CountryCode.US) {
   print(code.numeric);
 }
 ```
-[See more examples](https://github.com/denixport/dart.country/tree/master/example)
-
+[See more examples][examples]
 
 ## Bugs and feature requests
 
 Please file feature requests and bugs at the [issue tracker][tracker].
 
+[examples]: https://github.com/denixport/dart.country/tree/master/example
 [tracker]: https://github.com/denixport/dart.country/issues
