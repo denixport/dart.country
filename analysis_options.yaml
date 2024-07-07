@@ -1,4 +1,4 @@
-include: package:pedantic/analysis_options.yaml
+include: package:lints/recommended.yaml
 
 analyzer:
   strong-mode:
@@ -15,29 +15,29 @@ analyzer:
 
 linter:
   rules:
-    - always_declare_return_types
-    - avoid_null_checks_in_equality_operators
-    - await_only_futures
-    - camel_case_types
-    - cancel_subscriptions
-    - comment_references
-    - control_flow_in_finally
-    - directives_ordering
-    - empty_catches
-    - empty_statements
-    - hash_and_equals
-    - implementation_imports
-    - iterable_contains_unrelated_type
-    - library_names
-    - library_prefixes
-    - list_remove_unrelated_type
-    - non_constant_identifier_names
-    - overridden_fields
-    - package_api_docs
-    - prefer_collection_literals
-    - prefer_final_fields
-    - public_member_api_docs
-    - test_types_in_equals
-    - throw_in_finally
-    - type_init_formals
-    - unrelated_type_equality_checks
+    always_declare_return_types : true
+    avoid_null_checks_in_equality_operators : true
+    await_only_futures : true
+    camel_case_types : true
+    cancel_subscriptions : true
+    comment_references : true
+    control_flow_in_finally : true
+    directives_ordering : true
+    empty_catches : true
+    empty_statements : true
+    hash_and_equals : true
+    implementation_imports : true
+    library_names : true
+    library_prefixes : true
+    non_constant_identifier_names : true
+    overridden_fields : true
+    package_api_docs : true
+    prefer_collection_literals : true
+    prefer_final_fields : true
+    public_member_api_docs : true
+    test_types_in_equals : true
+    throw_in_finally : true
+    type_init_formals : true
+    unrelated_type_equality_checks : true
+    constant_identifier_names  : false
+ 

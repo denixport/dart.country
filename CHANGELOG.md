@@ -1,3 +1,6 @@
+## [1.1.0]
+- Added country name to every standard CountryCode.
+
 ## [1.0.0]
 Stable, null-safe release
 ### Changed
