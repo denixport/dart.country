@@ -5,6 +5,7 @@ void main() {
   print(CountryCode.US.alpha3); // -> USA
   print(CountryCode.US.numeric); // -> 840
   print(CountryCode.US.symbol); // -> 🇺🇸
+  print(CountryCode.US.countryName); // -> United States of America
 
   // The list of ISO-assigned codes are in CountryCode.values
   var list = CountryCode.values.map<String>((c) => c.alpha2).join(', ');
