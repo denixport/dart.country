@@ -1,4 +1,4 @@
-// Copyright (c) 2019-2021, Denis Portnov. All rights reserved.
+// Copyright (c) 2024, Denis Portnov. All rights reserved.
 // Released under MIT License that can be found in the LICENSE file.
 
 ///
@@ -167,7 +167,7 @@ class CountryCode {
       return _values[index];
     }
 
-    throw ArgumentError('Alpha code \"$code\" is not assigned');
+    throw ArgumentError('Alpha code "$code" is not assigned');
   }
 
   /// Returns country code by numeric code
@@ -187,7 +187,7 @@ class CountryCode {
       return _values[index];
     }
 
-    throw ArgumentError('No country assigned for numeric code \"$code\"');
+    throw ArgumentError('No country assigned for numeric code "$code"');
   }
 
   // returns index of numeric code in values list
@@ -303,21 +303,21 @@ class CountryCode {
     if (alpha2 != null &&
         (_parseAlpha(alpha2, _userValues) != -1 ||
             _parseAlpha(alpha2, _values) != -1)) {
-      throw StateError('Alpha-2 code \"$alpha2\" is already assigned');
+      throw StateError('Alpha-2 code "$alpha2" is already assigned');
     }
 
     // check Alpha-3
     if (alpha3 != null &&
         (_parseAlpha(alpha3, _userValues) != -1 ||
             _parseAlpha(alpha3, _values) != -1)) {
-      throw StateError('Alpha-3 code \"$alpha3\" is already assigned');
+      throw StateError('Alpha-3 code "$alpha3" is already assigned');
     }
 
     // check numeric
     if (numeric != null &&
         (_indexOfNum(numeric, _userValues) != -1 ||
             _indexOfNum(numeric, _values) != -1)) {
-      throw StateError('Numeric code \"$numeric\" is already assigned');
+      throw StateError('Numeric code "$numeric" is already assigned');
     }
 
     _userValues.add(
@@ -331,7 +331,7 @@ class CountryCode {
     _userValues.clear();
   }
 
-  // pack/unpack rutines ------------------------------------------------------
+  // pack/unpack routines ------------------------------------------------------
 
   static int _packAlpha2(List<int> cu) {
     // hack to avoid 32-bit truncating in JS
