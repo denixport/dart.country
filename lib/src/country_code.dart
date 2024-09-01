@@ -111,8 +111,8 @@ class CountryCode {
 
   /// Returns string representation of `CountryCode`.
   /// Which is `CountryCode.` followed by either alpha-2, alpha-2, or numeric code
-  /// depeding on which code is defined.
-  /// For ISO-assigned country codes it alwais returns `CountryCode.` + alpha-2.
+  /// depending on which code is defined.
+  /// For ISO-assigned country codes it always returns `CountryCode.` + alpha-2.
   @override
   String toString() {
     // 'Country'.codeUnits + 3
@@ -355,8 +355,8 @@ class CountryCode {
 
   static int _packAlpha3(List<int> cu) {
     return (cu[0] - _baseChar) << 20 |
-        (cu[1] - _baseChar) << 15 |
-        (cu[2] - _baseChar) << 10;
+    (cu[1] - _baseChar) << 15 |
+    (cu[2] - _baseChar) << 10;
   }
 
   // gets Alpha-2 code units from int
@@ -377,7 +377,7 @@ class CountryCode {
 
   // ranges of user-assignable Alpha-2 codes
   static const _userA2Ranges = <int>[
-    1107296256, 1107296256, // AA..AA //
+    1107296256, 1107296256, // AA..AA
     18689818624, 19126026240, // QM..QZ
     25803358208, 26642219008, // XA..XZ
     28789702656, 28789702656, // ZZ..ZZ
@@ -385,7 +385,7 @@ class CountryCode {
 
   // ranges of user-assignable Alpha-3 codes
   static const _userA3Ranges = <int>[
-    1082368, 1107968, // AAA..AAZ //
+    1082368, 1107968, // AAA..AAZ
     18252800, 18704384, // QMA..QZZ
     25199616, 26044416, // XAA..XZZ
     28115968, 28141568, // ZZA..ZZZ
@@ -1159,5 +1159,5 @@ class CountryCode {
     TG, TH, TJ, TK, TL, TM, TN, TO, TR, TT, TV, TW, TZ, UA, UG, UM, US, UY,
     UZ, VA, VC, VE, VG, VI, VN, VU, WF, WS, YE, YT, ZA, ZM, ZW,
   ];
-  //GENERATED:END
+//GENERATED:END
 }
