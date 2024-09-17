@@ -19,9 +19,8 @@ if (code == CountryCode.US) {
   print(code.alpha2);
   print(code.alpha3);
   print(code.numeric);
-}
-```
-[See more examples][examples]
+  print(code.name);
+}ples][
 
 ## Bugs and feature requests
 

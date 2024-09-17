@@ -1,3 +1,6 @@
+## [1.2.0]
+- Added country name to every standard CountryCode.
+
 ## [1.1.0]
 Minimal Dart SDK version requirement is v3.5
 

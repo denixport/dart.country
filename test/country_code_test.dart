@@ -3,6 +3,7 @@
 
 import 'package:country_code/country_code.dart';
 import 'package:test/test.dart';
+
 import 'gold.dart';
 
 void main() {
@@ -38,6 +39,7 @@ void main() {
 
     test('Can be printed', () {
       expect(CountryCode.RU.toString(), 'CountryCode.RU');
+      expect(CountryCode.AU.countryName, 'Australia');
     });
   });
 
@@ -51,11 +53,13 @@ void main() {
       var a3 = 'QPX';
       var n = 910;
 
-      var c = CountryCode.user(alpha2: a2, alpha3: a3, numeric: n);
+      var c = CountryCode.user(
+          alpha2: a2, alpha3: a3, numeric: n, countryName: 'Custom');
 
       expect(c.alpha2, a2);
       expect(c.alpha3, a3);
       expect(c.numeric, n);
+      expect(c.countryName, 'Custom');
       expect(c.isUserAssigned, isTrue);
 
       // not statically accessible
@@ -65,17 +69,20 @@ void main() {
     test('Can not create user-assigned country with out of range code', () {
       const codesA2 = <String>['QL', 'ZA'];
       for (var code in codesA2) {
-        expect(() => CountryCode.user(alpha2: code), throwsArgumentError);
+        expect(() => CountryCode.user(alpha2: code),
+            throwsArgumentError);
       }
 
       const codesA3 = <String>['QLA', 'ZAA'];
       for (var code in codesA3) {
-        expect(() => CountryCode.user(alpha3: code), throwsArgumentError);
+        expect(() => CountryCode.user(alpha3: code),
+            throwsArgumentError);
       }
 
       const codesN = <int>[0, 899, 1000];
       for (var code in codesN) {
-        expect(() => CountryCode.user(numeric: code), throwsArgumentError);
+        expect(() => CountryCode.user(numeric: code),
+            throwsArgumentError);
       }
     });
 

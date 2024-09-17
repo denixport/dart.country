@@ -8,7 +8,31 @@ analyzer:
 
 linter:
   rules:
-    constant_identifier_names: false
+    always_declare_return_types : true
+    avoid_null_checks_in_equality_operators : true
     avoid_unused_constructor_parameters: true
-    cancel_subscriptions: true
-    package_api_docs: true
+    await_only_futures : true
+    camel_case_types : true
+    cancel_subscriptions : true
+    comment_references : true
+    constant_identifier_names: false
+    control_flow_in_finally : true
+    directives_ordering : true
+    empty_catches : true
+    empty_statements : true
+    hash_and_equals : true
+    implementation_imports : true
+    library_names : true
+    library_prefixes : true
+    non_constant_identifier_names : true
+    overridden_fields : true
+    package_api_docs : true
+    prefer_collection_literals : true
+    prefer_final_fields : true
+    public_member_api_docs : true
+    test_types_in_equals : true
+    throw_in_finally : true
+    type_init_formals : true
+    unrelated_type_equality_checks : true
+    constant_identifier_names  : false
+ 
