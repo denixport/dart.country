@@ -1,26 +1,21 @@
 include: package:lints/recommended.yaml
 
 analyzer:
-  strong-mode:
-    implicit-casts: false
-    implicit-dynamic: false
-  errors:
-    dead_code: error
-    missing_required_param: error
-    missing_return: error
-    todo: info
-    unused_element: error
-    unused_import: error
-    unused_local_variable: error
+  language:
+    strict-casts: true
+    strict-inference: true
+    strict-raw-types: true
 
 linter:
   rules:
     always_declare_return_types : true
     avoid_null_checks_in_equality_operators : true
+    avoid_unused_constructor_parameters: true
     await_only_futures : true
     camel_case_types : true
     cancel_subscriptions : true
     comment_references : true
+    constant_identifier_names: false
     control_flow_in_finally : true
     directives_ordering : true
     empty_catches : true

@@ -23,7 +23,7 @@ void main() {
       }
     });
 
-    test('Generated values are statically accesible', () {
+    test('Generated values are statically accessible', () {
       var lines = isoGold.split('\n');
       for (var i = 0; i < lines.length; i++) {
         var fields = lines[i].split('\t');

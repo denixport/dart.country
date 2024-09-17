@@ -1,7 +1,6 @@
 List of ISO 3166-1 assigned country codes.
 
 [![pub package](https://img.shields.io/pub/v/country_code.svg)](https://pub.dartlang.org/packages/country_code)
-[![Build Status](https://travis-ci.org/denixport/dart.country.svg?branch=master)](https://travis-ci.org/denixport/dart.country)
 ![License](https://img.shields.io/github/license/denixport/dart.country.svg)
 
 ## Features

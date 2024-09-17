@@ -1,4 +1,4 @@
-// Copyright (c) 2019-2021, Denis Portnov. All rights reserved.
+// Copyright (c) 2024, Denis Portnov. All rights reserved.
 // Released under MIT License that can be found in the LICENSE file.
 
 ///
@@ -115,8 +115,8 @@ class CountryCode {
 
   /// Returns string representation of `CountryCode`.
   /// Which is `CountryCode.` followed by either alpha-2, alpha-2, or numeric code
-  /// depeding on which code is defined.
-  /// For ISO-assigned country codes it alwais returns `CountryCode.` + alpha-2.
+  /// depending on which code is defined.
+  /// For ISO-assigned country codes it always returns `CountryCode.` + alpha-2.
   @override
   String toString() {
     // 'Country'.codeUnits + 3
@@ -363,8 +363,8 @@ class CountryCode {
 
   static int _packAlpha3(List<int> cu) {
     return (cu[0] - _baseChar) << 20 |
-        (cu[1] - _baseChar) << 15 |
-        (cu[2] - _baseChar) << 10;
+    (cu[1] - _baseChar) << 15 |
+    (cu[2] - _baseChar) << 10;
   }
 
   // gets Alpha-3 code units from int
@@ -1181,5 +1181,6 @@ class CountryCode {
     TG, TH, TJ, TK, TL, TM, TN, TO, TR, TT, TV, TW, TZ, UA, UG, UM, US, UY,
     UZ, VA, VC, VE, VG, VI, VN, VU, WF, WS, YE, YT, ZA, ZM, ZW,
   ];
-  // GENERATED:END
+
+//GENERATED:END
 }

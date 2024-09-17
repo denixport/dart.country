@@ -1,7 +1,7 @@
 import 'package:country_code/country_code.dart';
 
 void main() {
-  // All ISO country codes are accesible via constants
+  // All ISO country codes are accessible via constants
   print(CountryCode.US.alpha3); // -> USA
   print(CountryCode.US.numeric); // -> 840
   print(CountryCode.US.symbol); // -> 🇺🇸
@@ -17,11 +17,23 @@ void main() {
   print(CountryCode.ofAlpha('USA').alpha2); // -> US
   print(CountryCode.ofNumeric(840).alpha2); // -> US
 
-  // Always same values for the same country code is returned
+  // Always same value for the same country code is returned
   print(identical(CountryCode.ofAlpha('US'), CountryCode.US)); // -> true
 
-  // You can also parse alpha-2, alpha-3, or numeric code
-  print(CountryCode.parse('US').alpha2); // -> US
-  print(CountryCode.parse('USA').alpha2); // -> US
-  print(CountryCode.parse('840').alpha2); // -> US
+  // You can use CountryCode as map key
+  var translations = {
+    'en': {
+      CountryCode.US: 'United States of America',
+    },
+    'fr': {
+      CountryCode.US: 'États-Unis d\'Amérique',
+    },
+    'es': {
+      CountryCode.US: 'Estados Unidos de América',
+    }
+  };
+
+  for (var lang in ['en', 'fr', 'es']) {
+    print("${CountryCode.US.alpha2}: ${translations[lang]?[CountryCode.US]}");
+  }
 }
