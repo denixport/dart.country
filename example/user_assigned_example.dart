@@ -1,23 +1,31 @@
-import 'package:country_code/country_code.dart';
+//this is a cli example
+//ignore_for_file: avoid_print
+
+import 'package:country_code2/country_code2.dart';
 
 void main() {
-  CountryCode c1, c2, c3, c4, c5;
+  CountryCode c1;
+  CountryCode c2;
+  CountryCode c3;
+  CountryCode c4;
+  CountryCode c5;
 
   // Create values with custom codes (From ISO defined code range)
-  c1 = CountryCode.user(alpha2: 'AA');
+  c1 = CountryCode.user(alpha2: 'AA', countryName: 'Best');
   print(c1.alpha2); // -> AA
   print(c1.alpha3); // ->
   print(c1.numeric); // -> 0
 
   // Country values for the same code are equal, but not the same object
-  c1 = CountryCode.user(alpha3: 'XAA');
-  c2 = CountryCode.user(alpha3: 'XAA');
+  c1 = CountryCode.user(alpha3: 'XAA', countryName: 'Xanadu');
+  c2 = CountryCode.user(alpha3: 'XAA', countryName: 'Xanadi');
   print(c1 == c2); // -> true
   print(identical(c1, c2)); // -> false
 
   // You need to assign country code using static method assign(),
   // to be able to use parsing and static accessors for the code.
-  var index = CountryCode.assign(alpha3: 'XAA', numeric: 901);
+  final index =
+      CountryCode.assign(alpha3: 'XAA', numeric: 901, countryName: 'Xanadu');
   print(index); // -> 0
   print(CountryCode.userValues); // -> [Country.XXA]
 

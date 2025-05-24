@@ -15,13 +15,25 @@ List of ISO 3166-1 assigned country codes.
 import 'package:country_code/country_code.dart';
 
 var code = CountryCode.tryParse("US");
-if (code == CountryCode.US) {
+if (code == CountryCodes.us) {
+  print(code.countryName);
   print(code.alpha2);
   print(code.alpha3);
   print(code.numeric);
 }
+
+/// Use one of the named country codes.
+var code = CountryCodes.us;
+print(code.countryName);
+print(code.alpha2);
+print(code.alpha3);
+print(code.numeric);
+
+/// Get a full list of Country Codes:
+final allCodes = CountryCode.values;
 ```
-[See more examples][examples]
+
+
 
 ## Bugs and feature requests
 
@@ -29,3 +41,15 @@ Please file feature requests and bugs at the [issue tracker][tracker].
 
 [examples]: https://github.com/denixport/dart.country/tree/master/example
 [tracker]: https://github.com/denixport/dart.country/issues
+
+
+# building
+The list of country codes are stored in a tool/country_codes.yaml.
+
+You can regenerate the 'country_codes.dart' file by running:
+```bash
+dart tool/generate_country_codes.dart
+```
+
+# Thanks
+This code is a fork of  denixport/dart.country
