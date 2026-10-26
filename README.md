@@ -1,7 +1,7 @@
 List of ISO 3166-1 assigned country codes.
 
-[![pub package](https://img.shields.io/pub/v/country_code.svg)](https://pub.dartlang.org/packages/country_code)
-![License](https://img.shields.io/github/license/denixport/dart.country.svg)
+[![pub package](https://img.shields.io/pub/v/country_code2.svg)](https://pub.dev/packages/country_code2)
+![License](https://img.shields.io/github/license/onepub-dev/dart.country.svg)
 
 ## Features
 * [x] ISO 3166-1 alpha-2. alpha-3, and numeric country codes in enum-like class
@@ -12,20 +12,45 @@ List of ISO 3166-1 assigned country codes.
 ## Usage
 
 ```dart
-import 'package:country_code/country_code.dart';
+import 'package:country_code2/country_code2.dart';
 
-var code = CountryCode.tryParse("US");
-if (code == CountryCode.US) {
-  print(code.alpha2);
-  print(code.alpha3);
-  print(code.numeric);
+final parsedCode = CountryCode.tryParse('US');
+if (parsedCode == CountryCodes.us) {
+  final us = parsedCode!;
+  print(us.countryName);
+  print(us.alpha2);
+  print(us.alpha3);
+  print(us.numeric);
 }
+
+/// Use one of the named country codes.
+final code = CountryCodes.us;
+print(code.countryName);
+print(code.alpha2);
+print(code.alpha3);
+print(code.numeric);
+
+/// Get a full list of Country Codes:
+final allCodes = CountryCode.values;
 ```
-[See more examples][examples]
+
+
 
 ## Bugs and feature requests
 
 Please file feature requests and bugs at the [issue tracker][tracker].
 
 [examples]: https://github.com/denixport/dart.country/tree/master/example
-[tracker]: https://github.com/denixport/dart.country/issues
+[tracker]: https://github.com/onepub-dev/dart.country/issues
+
+
+# building
+The list of country codes are stored in a tool/country_codes.yaml.
+
+You can regenerate the 'country_codes.dart' file by running:
+```bash
+dart tool/generate_country_codes.dart
+```
+
+# Thanks
+This code is a fork of  denixport/dart.country

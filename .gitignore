@@ -9,3 +9,5 @@ tmp/
 
 .packages
 pubspec.lock
+.history
+.failed_tracker
