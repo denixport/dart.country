@@ -54,6 +54,13 @@ void main() {
       expect(CountryCodes.ru.toString(), 'CountryCode.RU');
       expect(CountryCodes.au.countryName, 'Australia');
     });
+
+    test('Numeric parser rejects sign and excessive digits', () {
+      for (final code in ['+36', '-36', '00036']) {
+        expect(CountryCode.tryParse(code), isNull);
+        expect(() => CountryCode.parse(code), throwsFormatException);
+      }
+    });
   });
 
   group('User-assigned', () {
@@ -90,6 +97,19 @@ void main() {
       }
     });
 
+    test('Rejects malformed user-assigned codes at runtime', () {
+      expect(CountryCode.user, throwsArgumentError);
+      expect(CountryCode.assign, throwsArgumentError);
+      for (final code in ['Pq', 'ZZextra', 'ZZ ', 'Z']) {
+        expect(() => CountryCode.user(alpha2: code), throwsArgumentError);
+        expect(() => CountryCode.assign(alpha2: code), throwsArgumentError);
+      }
+      for (final code in ['QPx', 'ZZZextra', 'Z']) {
+        expect(() => CountryCode.user(alpha3: code), throwsArgumentError);
+        expect(() => CountryCode.assign(alpha3: code), throwsArgumentError);
+      }
+    });
+
     test('Assign with only Alpha-2', () {
       final idx = CountryCode.assign(alpha2: 'QP');
       final c = CountryCode.values[idx];
@@ -97,6 +117,10 @@ void main() {
       expect(c.alpha3, '');
       expect(c.numeric, 0);
       expect(c.isUserAssigned, isTrue);
+      expect(CountryCode.tryParse('0'), isNull);
+      expect(() => CountryCode.ofNumeric(0), throwsArgumentError);
+      expect(CountryCode.tryParse('@@@'), isNull);
+      expect(() => CountryCode.ofAlpha('@@@'), throwsArgumentError);
     });
 
     test('Assign with only Alpha-3', () {
@@ -115,6 +139,8 @@ void main() {
       expect(c.alpha3, '');
       expect(c.numeric, 999);
       expect(c.isUserAssigned, isTrue);
+      expect(CountryCode.tryParse('@@'), isNull);
+      expect(() => CountryCode.ofAlpha('@@'), throwsArgumentError);
     });
 
     test('No duplicate user code', () {

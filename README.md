@@ -1,7 +1,7 @@
 List of ISO 3166-1 assigned country codes.
 
-[![pub package](https://img.shields.io/pub/v/country_code.svg)](https://pub.dartlang.org/packages/country_code)
-![License](https://img.shields.io/github/license/denixport/dart.country.svg)
+[![pub package](https://img.shields.io/pub/v/country_code2.svg)](https://pub.dev/packages/country_code2)
+![License](https://img.shields.io/github/license/onepub-dev/dart.country.svg)
 
 ## Features
 * [x] ISO 3166-1 alpha-2. alpha-3, and numeric country codes in enum-like class
@@ -12,18 +12,19 @@ List of ISO 3166-1 assigned country codes.
 ## Usage
 
 ```dart
-import 'package:country_code/country_code.dart';
+import 'package:country_code2/country_code2.dart';
 
-var code = CountryCode.tryParse("US");
-if (code == CountryCodes.us) {
-  print(code.countryName);
-  print(code.alpha2);
-  print(code.alpha3);
-  print(code.numeric);
+final parsedCode = CountryCode.tryParse('US');
+if (parsedCode == CountryCodes.us) {
+  final us = parsedCode!;
+  print(us.countryName);
+  print(us.alpha2);
+  print(us.alpha3);
+  print(us.numeric);
 }
 
 /// Use one of the named country codes.
-var code = CountryCodes.us;
+final code = CountryCodes.us;
 print(code.countryName);
 print(code.alpha2);
 print(code.alpha3);
@@ -40,7 +41,7 @@ final allCodes = CountryCode.values;
 Please file feature requests and bugs at the [issue tracker][tracker].
 
 [examples]: https://github.com/denixport/dart.country/tree/master/example
-[tracker]: https://github.com/denixport/dart.country/issues
+[tracker]: https://github.com/onepub-dev/dart.country/issues
 
 
 # building

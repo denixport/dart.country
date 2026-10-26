@@ -1,3 +1,9 @@
+# 2.0.1
+- Validate user-assigned country codes at runtime as exact uppercase ASCII alpha codes or numeric values in the reserved range.
+- Reject signed and overlong numeric inputs; reject numeric zero when a user-assigned code has no numeric element.
+- Reject `@@` or `@@@` lookups for user-assigned codes with missing alpha elements.
+- Avoid allocating a code-unit copy for alpha inputs of invalid length.
+
 # 2.0.0
 - forked country_code package as no updates where comming through.
 - Added countryName to all standard country codes.

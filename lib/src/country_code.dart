@@ -13,16 +13,8 @@ class CountryCode {
   /// Note: Code is not registered in class `values`, use `assign` to
   /// register user country codes.
   factory CountryCode.user(
-      {String? countryName,
-      String? alpha2,
-      String? alpha3,
-      int? numeric}) {
-    assert(!(alpha2 == null && alpha3 == null && numeric == null),
-        'at least one must be passed');
-    assert(alpha2 == null || alpha2.length >= 2,
-        'If alpha2 is passed it must be at least 2 characters long');
-    assert(alpha3 == null || alpha3.length >= 3,
-        'If alpha3 is passed it must be at least 3 characters long');
+      {String? countryName, String? alpha2, String? alpha3, int? numeric}) {
+    _validateUserCode(alpha2: alpha2, alpha3: alpha3, numeric: numeric);
 
     var a2 = 0;
     if (alpha2 != null) {
@@ -38,11 +30,6 @@ class CountryCode {
       if (!_isInRange(a3, _userA3Ranges)) {
         throw ArgumentError('Alpha-3 code is not in allowed range');
       }
-    }
-
-    if (numeric != null && (numeric < 900 || numeric > 999)) {
-      throw ArgumentError.value(
-          numeric, 'numeric', 'Should be between 900..999');
     }
 
     numeric ??= 0;
@@ -209,6 +196,9 @@ class CountryCode {
 
   // returns index of numeric code in values list
   static int _indexOfNum(int code, List<CountryCode> values) {
+    if (code < 1 || code > 999) {
+      return -1;
+    }
     for (var i = 0; i < values.length; i++) {
       if (values[i]._code & 0x3ff == code) {
         return i;
@@ -270,19 +260,25 @@ class CountryCode {
 
   // Parses alpha-2 or alpha-3 code, returns -1 for invalid or unassigned
   static int _parseAlpha(String code, List<CountryCode> values) {
+    if (code.length != 2 && code.length != 3) {
+      return -1;
+    }
     final cu = code.codeUnits;
     switch (cu.length) {
       case 2:
         for (var i = 0; i < values.length; i++) {
           _unpackAlpha2(values[i]._code);
-          if (_a2cu[0] == cu[0] && _a2cu[1] == cu[1]) {
+          if (_a2cu[0] != _baseChar && _a2cu[0] == cu[0] && _a2cu[1] == cu[1]) {
             return i;
           }
         }
       case 3:
         for (var i = 0; i < values.length; i++) {
           _unpackAlpha3(values[i]._code);
-          if (_a3cu[0] == cu[0] && _a3cu[1] == cu[1] && _a3cu[2] == cu[2]) {
+          if (_a3cu[0] != _baseChar &&
+              _a3cu[0] == cu[0] &&
+              _a3cu[1] == cu[1] &&
+              _a3cu[2] == cu[2]) {
             return i;
           }
         }
@@ -292,16 +288,16 @@ class CountryCode {
 
   // Parses numeric code, returns -1 for invalid or unassigned
   static int _parseNum(String code, List<CountryCode> values) {
+    if (code.isEmpty ||
+        code.length > 3 ||
+        code.codeUnits.any((unit) => unit < 0x30 || unit > 0x39)) {
+      return -1;
+    }
     final n = int.tryParse(code);
     if (n == null) {
       return -1;
     }
-    for (var i = 0; i < values.length; i++) {
-      if (values[i]._code & 0x3ff == n) {
-        return i;
-      }
-    }
-    return -1;
+    return _indexOfNum(n, values);
   }
 
   /// Assigns user-defined codes. Returns index of country value in [userValues]
@@ -310,12 +306,8 @@ class CountryCode {
   /// After calling [assign] user-assigned codes are available through
   /// [parse], [tryParse], [ofAlpha], and [ofNumeric] static methods.
   static int assign(
-      { String? countryName,
-      String? alpha2,
-      String? alpha3,
-      int? numeric}) {
-    assert(!(alpha2 == null && alpha3 == null && numeric == null),
-        'one of the three codes are required');
+      {String? countryName, String? alpha2, String? alpha3, int? numeric}) {
+    _validateUserCode(alpha2: alpha2, alpha3: alpha3, numeric: numeric);
 
     // check Alpha-2
     if (alpha2 != null &&
@@ -395,6 +387,33 @@ class CountryCode {
       }
     }
     return false;
+  }
+
+  static void _validateUserCode(
+      {String? alpha2, String? alpha3, int? numeric}) {
+    if (alpha2 == null && alpha3 == null && numeric == null) {
+      throw ArgumentError('At least one country code is required');
+    }
+    if (alpha2 != null) {
+      _validateAlpha(alpha2, 2, 'alpha2');
+    }
+    if (alpha3 != null) {
+      _validateAlpha(alpha3, 3, 'alpha3');
+    }
+    if (numeric != null && (numeric < 900 || numeric > 999)) {
+      throw ArgumentError.value(numeric, 'numeric', 'Must be in 900..999');
+    }
+  }
+
+  static void _validateAlpha(String code, int length, String name) {
+    if (code.length != length ||
+        code.codeUnits.any((unit) => unit < 0x41 || unit > 0x5a)) {
+      throw ArgumentError.value(
+        code,
+        name,
+        'Must be exactly $length ASCII uppercase letters',
+      );
+    }
   }
 
   // ranges of user-assignable Alpha-2 codes
