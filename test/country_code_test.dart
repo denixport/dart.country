@@ -3,36 +3,31 @@
 
 import 'package:country_code/country_code.dart';
 import 'package:test/test.dart';
-import 'gold.dart';
 
 void main() {
   group('ISO-assigned', () {
-    test('Generated values are correct', () {
-      var lines = isoGold.split('\n');
-      for (var i = 0; i < lines.length; i++) {
-        var fields = lines[i].split('\t');
+    // Values are checked against tool/iso3166.tsv in generator_test.dart.
+    // Checks below don't need file access and can run on any platform.
+    test('Values are consistent', () {
+      expect(CountryCode.values, isNotEmpty);
+      for (var i = 0; i < CountryCode.values.length; i++) {
         var c = CountryCode.values[i];
 
-        expect(c.alpha2, fields[0]);
-        expect(c.alpha3, fields[1]);
-        expect(c.numeric, int.parse(fields[2]));
+        expect(c.index, i);
+        expect(c.alpha2, matches(RegExp(r'^[A-Z]{2}$')));
+        expect(c.alpha3, matches(RegExp(r'^[A-Z]{3}$')));
+        expect(c.numeric, inInclusiveRange(1, 899));
         expect(c.isUserAssigned, isFalse);
-
-        expect(identical(CountryCode.values[c.index], c), isTrue);
       }
     });
 
-    test('Generated values are statically accessible', () {
-      var lines = isoGold.split('\n');
-      for (var i = 0; i < lines.length; i++) {
-        var fields = lines[i].split('\t');
-        var n = int.parse(fields[2]);
-        var c = CountryCode.values[i];
-
-        expect(identical(CountryCode.parse(fields[1]), c), isTrue);
-        expect(identical(CountryCode.ofAlpha(fields[0]), c), isTrue);
-        expect(identical(CountryCode.ofAlpha(fields[1]), c), isTrue);
-        expect(identical(CountryCode.ofNumeric(n), c), isTrue);
+    test('Values are statically accessible', () {
+      for (var c in CountryCode.values) {
+        expect(identical(CountryCode.parse(c.alpha2), c), isTrue);
+        expect(identical(CountryCode.parse(c.alpha3), c), isTrue);
+        expect(identical(CountryCode.ofAlpha(c.alpha2), c), isTrue);
+        expect(identical(CountryCode.ofAlpha(c.alpha3), c), isTrue);
+        expect(identical(CountryCode.ofNumeric(c.numeric), c), isTrue);
       }
     });
 
