@@ -79,6 +79,25 @@ void main() {
       }
     });
 
+    test('Can not create user-assigned country with malformed code', () {
+      expect(() => CountryCode.user(), throwsArgumentError);
+
+      const codesA2 = <String>['', 'Q', 'QPX', 'qp', 'Q1', 'Q@'];
+      for (var code in codesA2) {
+        expect(() => CountryCode.user(alpha2: code), throwsArgumentError);
+        expect(() => CountryCode.assign(alpha2: code), throwsArgumentError);
+      }
+
+      const codesA3 = <String>['', 'QP', 'QPXX', 'qpx', 'QP1', 'QP['];
+      for (var code in codesA3) {
+        expect(() => CountryCode.user(alpha3: code), throwsArgumentError);
+        expect(() => CountryCode.assign(alpha3: code), throwsArgumentError);
+      }
+
+      expect(() => CountryCode.assign(), throwsArgumentError);
+      expect(CountryCode.userValues, isEmpty);
+    });
+
     test('Can be assigned with Alpha-2 only', () {
       var a2 = 'QP';
 

@@ -11,4 +11,3 @@ linter:
     constant_identifier_names: false
     avoid_unused_constructor_parameters: true
     cancel_subscriptions: true
-    package_api_docs: true
