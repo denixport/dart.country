@@ -1,3 +1,11 @@
+## [1.1.1]
+- SDK constraint set to `^3.5.0`, matching the minimum announced in 1.1.0
+- `CountryCode.user` and `CountryCode.assign` now validate input at runtime
+(previously `assert`s, stripped in release builds): alpha codes must be exactly
+2/3 uppercase ASCII letters, and at least one code is required. Throws `ArgumentError`.
+- Fixed pub.dev topics, removed deprecated `uploader` field, removed library name
+- Updated `lints` to 5.x, dropped removed `package_api_docs` lint
+
 ## [1.1.0]
 Minimal Dart SDK version requirement is v3.5
 

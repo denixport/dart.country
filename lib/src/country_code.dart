@@ -22,9 +22,7 @@ class CountryCode {
   /// Note: Code is not registered in class `values`, use `assign` to
   /// register user country codes.
   factory CountryCode.user({String? alpha2, String? alpha3, int? numeric}) {
-    assert(!(alpha2 == null && alpha3 == null && numeric == null));
-    assert(alpha2 == null || alpha2.length >= 2);
-    assert(alpha3 == null || alpha3.length >= 3);
+    _validateUserCode(alpha2: alpha2, alpha3: alpha3, numeric: numeric);
 
     var a2 = 0;
     if (alpha2 != null) {
@@ -297,7 +295,7 @@ class CountryCode {
   /// After calling [assign] user-assigned codes are available through
   /// [parse], [tryParse], [ofAlpha], and [ofNumeric] static methods.
   static int assign({String? alpha2, String? alpha3, int? numeric}) {
-    assert(!(alpha2 == null && alpha3 == null && numeric == null));
+    _validateUserCode(alpha2: alpha2, alpha3: alpha3, numeric: numeric);
 
     // check Alpha-2
     if (alpha2 != null &&
@@ -364,6 +362,30 @@ class CountryCode {
     _a3cu[0] = _baseChar + ((i >> 20) & 0x1F);
     _a3cu[1] = _baseChar + ((i >> 15) & 0x1F);
     _a3cu[2] = _baseChar + ((i >> 10) & 0x1F);
+  }
+
+  // Validates the shape of user-assigned codes. Range checks are done
+  // separately, after packing.
+  static void _validateUserCode(
+      {String? alpha2, String? alpha3, int? numeric}) {
+    if (alpha2 == null && alpha3 == null && numeric == null) {
+      throw ArgumentError(
+          'At least one of alpha2, alpha3, numeric is required');
+    }
+    if (alpha2 != null) {
+      _validateAlpha(alpha2, 2, 'alpha2');
+    }
+    if (alpha3 != null) {
+      _validateAlpha(alpha3, 3, 'alpha3');
+    }
+  }
+
+  static void _validateAlpha(String code, int length, String name) {
+    if (code.length != length ||
+        code.codeUnits.any((unit) => unit < 0x41 || unit > 0x5a)) {
+      throw ArgumentError.value(
+          code, name, 'Must be exactly $length uppercase ASCII letters');
+    }
   }
 
   static bool _isInRange(int code, List<int> ranges) {
