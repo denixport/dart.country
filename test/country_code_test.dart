@@ -11,7 +11,7 @@ void main() {
     test('Values are consistent', () {
       expect(CountryCode.values, isNotEmpty);
       for (var i = 0; i < CountryCode.values.length; i++) {
-        var c = CountryCode.values[i];
+        final c = CountryCode.values[i];
 
         expect(c.index, i);
         expect(c.alpha2, matches(RegExp(r'^[A-Z]{2}$')));
@@ -22,7 +22,7 @@ void main() {
     });
 
     test('Values are statically accessible', () {
-      for (var c in CountryCode.values) {
+      for (final c in CountryCode.values) {
         expect(identical(CountryCode.parse(c.alpha2), c), isTrue);
         expect(identical(CountryCode.parse(c.alpha3), c), isTrue);
         expect(identical(CountryCode.ofAlpha(c.alpha2), c), isTrue);
@@ -42,11 +42,11 @@ void main() {
     });
 
     test('Can create user-assigned country code', () {
-      var a2 = 'QP';
-      var a3 = 'QPX';
-      var n = 910;
+      final a2 = 'QP';
+      final a3 = 'QPX';
+      final n = 910;
 
-      var c = CountryCode.user(alpha2: a2, alpha3: a3, numeric: n);
+      final c = CountryCode.user(alpha2: a2, alpha3: a3, numeric: n);
 
       expect(c.alpha2, a2);
       expect(c.alpha3, a3);
@@ -59,17 +59,17 @@ void main() {
 
     test('Can not create user-assigned country with out of range code', () {
       const codesA2 = <String>['QL', 'ZA'];
-      for (var code in codesA2) {
+      for (final code in codesA2) {
         expect(() => CountryCode.user(alpha2: code), throwsArgumentError);
       }
 
       const codesA3 = <String>['QLA', 'ZAA'];
-      for (var code in codesA3) {
+      for (final code in codesA3) {
         expect(() => CountryCode.user(alpha3: code), throwsArgumentError);
       }
 
       const codesN = <int>[0, 899, 1000];
-      for (var code in codesN) {
+      for (final code in codesN) {
         expect(() => CountryCode.user(numeric: code), throwsArgumentError);
       }
     });
@@ -78,13 +78,13 @@ void main() {
       expect(() => CountryCode.user(), throwsArgumentError);
 
       const codesA2 = <String>['', 'Q', 'QPX', 'qp', 'Q1', 'Q@'];
-      for (var code in codesA2) {
+      for (final code in codesA2) {
         expect(() => CountryCode.user(alpha2: code), throwsArgumentError);
         expect(() => CountryCode.assign(alpha2: code), throwsArgumentError);
       }
 
       const codesA3 = <String>['', 'QP', 'QPXX', 'qpx', 'QP1', 'QP['];
-      for (var code in codesA3) {
+      for (final code in codesA3) {
         expect(() => CountryCode.user(alpha3: code), throwsArgumentError);
         expect(() => CountryCode.assign(alpha3: code), throwsArgumentError);
       }
@@ -94,10 +94,10 @@ void main() {
     });
 
     test('Can be assigned with Alpha-2 only', () {
-      var a2 = 'QP';
+      final a2 = 'QP';
 
-      var index = CountryCode.assign(alpha2: a2);
-      var c = CountryCode.values[index];
+      final index = CountryCode.assign(alpha2: a2);
+      final c = CountryCode.values[index];
 
       expect(c.alpha2, a2);
       expect(c.alpha3, '');
@@ -106,10 +106,10 @@ void main() {
     });
 
     test('Can be assigned with Alpha-3 only', () {
-      var a3 = 'XXZ';
+      final a3 = 'XXZ';
 
-      var index = CountryCode.assign(alpha3: a3);
-      var c = CountryCode.values[index];
+      final index = CountryCode.assign(alpha3: a3);
+      final c = CountryCode.values[index];
 
       expect(c.alpha2, '');
       expect(c.alpha3, a3);
@@ -118,10 +118,10 @@ void main() {
     });
 
     test('Can be assigned with numeric only', () {
-      var n = 999;
+      final n = 999;
 
-      var index = CountryCode.assign(numeric: n);
-      var c = CountryCode.values[index];
+      final index = CountryCode.assign(numeric: n);
+      final c = CountryCode.values[index];
 
       expect(c.alpha2, '');
       expect(c.alpha3, '');
@@ -135,8 +135,8 @@ void main() {
     });
 
     test('Can be checked for equality', () {
-      var c1 = CountryCode.user(alpha2: 'ZZ');
-      var c2 = CountryCode.user(alpha2: 'ZZ');
+      final c1 = CountryCode.user(alpha2: 'ZZ');
+      final c2 = CountryCode.user(alpha2: 'ZZ');
 
       expect(identical(c1, c2), isFalse);
       expect(c1, equals(c2));

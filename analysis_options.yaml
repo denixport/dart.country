@@ -11,3 +11,5 @@ linter:
     constant_identifier_names: false
     avoid_unused_constructor_parameters: true
     cancel_subscriptions: true
+    prefer_final_locals: true
+    prefer_final_in_for_each: true
