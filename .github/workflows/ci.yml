@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Dart ${{ matrix.sdk }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # Lowest supported version (pubspec.yaml) and latest stable
+        sdk: ['3.8', stable]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: ${{ matrix.sdk }}
+      - run: dart pub get
+      - name: Check generated code is up to date
+        run: dart run tool/generate.dart --check
+      - run: dart analyze --fatal-infos
+      - run: dart format --output=none --set-exit-if-changed .
+      - run: dart test
+      - name: Validate package
+        if: matrix.sdk == 'stable'
+        run: dart pub publish --dry-run

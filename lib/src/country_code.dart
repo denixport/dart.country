@@ -89,14 +89,14 @@ class CountryCode {
 
   /// Returns `true` if the code is official ISO-assigned
   bool get isOfficial {
-    var n = _code & 0x3ff;
+    final n = _code & 0x3ff;
     return n > 0 && n < 900;
   }
 
   /// Returns `true` if the code is user-assigned.
   /// See (User-assigned code elements)[https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#User-assigned_code_elements]
   bool get isUserAssigned {
-    var n = _code & 0x3ff;
+    final n = _code & 0x3ff;
     return n == 0 || n >= 900;
   }
 
@@ -129,7 +129,7 @@ class CountryCode {
       return String.fromCharCodes(cu + _a3cu);
     }
 
-    var n = _code & 0x3ff;
+    final n = _code & 0x3ff;
     if (n != 0) {
       return String.fromCharCodes(cu + n.toString().padLeft(3, '0').codeUnits);
     }
@@ -206,7 +206,7 @@ class CountryCode {
   /// or 2-3 digits of numeric code
   /// Throws `FormatException` if the code is not valid country code
   static CountryCode parse(String source) {
-    var c = _parse(source);
+    final c = _parse(source);
     if (c == null) {
       throw FormatException('Invalid or non-assigned code', source);
     }
@@ -256,7 +256,7 @@ class CountryCode {
 
   // Parses alpha-2 or alpha-3 code, returns -1 for invalid or unassigned
   static int _parseAlpha(String code, List<CountryCode> values) {
-    var cu = code.codeUnits;
+    final cu = code.codeUnits;
     switch (cu.length) {
       case 2:
         for (var i = 0; i < values.length; i++) {
@@ -280,7 +280,7 @@ class CountryCode {
 
   // Parses numeric code, returns -1 for invalid or unassigned
   static int _parseNum(String code, List<CountryCode> values) {
-    var n = int.tryParse(code);
+    final n = int.tryParse(code);
     if (n == null) {
       return -1;
     }

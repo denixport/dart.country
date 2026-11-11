@@ -17,7 +17,7 @@ void main() {
 
   // You need to assign country code using static method assign(),
   // to be able to use parsing and static accessors for the code.
-  var index = CountryCode.assign(alpha3: 'XAA', numeric: 901);
+  final index = CountryCode.assign(alpha3: 'XAA', numeric: 901);
   print(index); // -> 0
   print(CountryCode.userValues); // -> [Country.XXA]
 

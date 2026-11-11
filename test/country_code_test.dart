@@ -3,36 +3,31 @@
 
 import 'package:country_code/country_code.dart';
 import 'package:test/test.dart';
-import 'gold.dart';
 
 void main() {
   group('ISO-assigned', () {
-    test('Generated values are correct', () {
-      var lines = isoGold.split('\n');
-      for (var i = 0; i < lines.length; i++) {
-        var fields = lines[i].split('\t');
-        var c = CountryCode.values[i];
+    // Values are checked against tool/iso3166.tsv in generator_test.dart.
+    // Checks below don't need file access and can run on any platform.
+    test('Values are consistent', () {
+      expect(CountryCode.values, isNotEmpty);
+      for (var i = 0; i < CountryCode.values.length; i++) {
+        final c = CountryCode.values[i];
 
-        expect(c.alpha2, fields[0]);
-        expect(c.alpha3, fields[1]);
-        expect(c.numeric, int.parse(fields[2]));
+        expect(c.index, i);
+        expect(c.alpha2, matches(RegExp(r'^[A-Z]{2}$')));
+        expect(c.alpha3, matches(RegExp(r'^[A-Z]{3}$')));
+        expect(c.numeric, inInclusiveRange(1, 899));
         expect(c.isUserAssigned, isFalse);
-
-        expect(identical(CountryCode.values[c.index], c), isTrue);
       }
     });
 
-    test('Generated values are statically accessible', () {
-      var lines = isoGold.split('\n');
-      for (var i = 0; i < lines.length; i++) {
-        var fields = lines[i].split('\t');
-        var n = int.parse(fields[2]);
-        var c = CountryCode.values[i];
-
-        expect(identical(CountryCode.parse(fields[1]), c), isTrue);
-        expect(identical(CountryCode.ofAlpha(fields[0]), c), isTrue);
-        expect(identical(CountryCode.ofAlpha(fields[1]), c), isTrue);
-        expect(identical(CountryCode.ofNumeric(n), c), isTrue);
+    test('Values are statically accessible', () {
+      for (final c in CountryCode.values) {
+        expect(identical(CountryCode.parse(c.alpha2), c), isTrue);
+        expect(identical(CountryCode.parse(c.alpha3), c), isTrue);
+        expect(identical(CountryCode.ofAlpha(c.alpha2), c), isTrue);
+        expect(identical(CountryCode.ofAlpha(c.alpha3), c), isTrue);
+        expect(identical(CountryCode.ofNumeric(c.numeric), c), isTrue);
       }
     });
 
@@ -47,11 +42,11 @@ void main() {
     });
 
     test('Can create user-assigned country code', () {
-      var a2 = 'QP';
-      var a3 = 'QPX';
-      var n = 910;
+      final a2 = 'QP';
+      final a3 = 'QPX';
+      final n = 910;
 
-      var c = CountryCode.user(alpha2: a2, alpha3: a3, numeric: n);
+      final c = CountryCode.user(alpha2: a2, alpha3: a3, numeric: n);
 
       expect(c.alpha2, a2);
       expect(c.alpha3, a3);
@@ -64,17 +59,17 @@ void main() {
 
     test('Can not create user-assigned country with out of range code', () {
       const codesA2 = <String>['QL', 'ZA'];
-      for (var code in codesA2) {
+      for (final code in codesA2) {
         expect(() => CountryCode.user(alpha2: code), throwsArgumentError);
       }
 
       const codesA3 = <String>['QLA', 'ZAA'];
-      for (var code in codesA3) {
+      for (final code in codesA3) {
         expect(() => CountryCode.user(alpha3: code), throwsArgumentError);
       }
 
       const codesN = <int>[0, 899, 1000];
-      for (var code in codesN) {
+      for (final code in codesN) {
         expect(() => CountryCode.user(numeric: code), throwsArgumentError);
       }
     });
@@ -83,13 +78,13 @@ void main() {
       expect(() => CountryCode.user(), throwsArgumentError);
 
       const codesA2 = <String>['', 'Q', 'QPX', 'qp', 'Q1', 'Q@'];
-      for (var code in codesA2) {
+      for (final code in codesA2) {
         expect(() => CountryCode.user(alpha2: code), throwsArgumentError);
         expect(() => CountryCode.assign(alpha2: code), throwsArgumentError);
       }
 
       const codesA3 = <String>['', 'QP', 'QPXX', 'qpx', 'QP1', 'QP['];
-      for (var code in codesA3) {
+      for (final code in codesA3) {
         expect(() => CountryCode.user(alpha3: code), throwsArgumentError);
         expect(() => CountryCode.assign(alpha3: code), throwsArgumentError);
       }
@@ -99,10 +94,10 @@ void main() {
     });
 
     test('Can be assigned with Alpha-2 only', () {
-      var a2 = 'QP';
+      final a2 = 'QP';
 
-      var index = CountryCode.assign(alpha2: a2);
-      var c = CountryCode.values[index];
+      final index = CountryCode.assign(alpha2: a2);
+      final c = CountryCode.values[index];
 
       expect(c.alpha2, a2);
       expect(c.alpha3, '');
@@ -111,10 +106,10 @@ void main() {
     });
 
     test('Can be assigned with Alpha-3 only', () {
-      var a3 = 'XXZ';
+      final a3 = 'XXZ';
 
-      var index = CountryCode.assign(alpha3: a3);
-      var c = CountryCode.values[index];
+      final index = CountryCode.assign(alpha3: a3);
+      final c = CountryCode.values[index];
 
       expect(c.alpha2, '');
       expect(c.alpha3, a3);
@@ -123,10 +118,10 @@ void main() {
     });
 
     test('Can be assigned with numeric only', () {
-      var n = 999;
+      final n = 999;
 
-      var index = CountryCode.assign(numeric: n);
-      var c = CountryCode.values[index];
+      final index = CountryCode.assign(numeric: n);
+      final c = CountryCode.values[index];
 
       expect(c.alpha2, '');
       expect(c.alpha3, '');
@@ -140,8 +135,8 @@ void main() {
     });
 
     test('Can be checked for equality', () {
-      var c1 = CountryCode.user(alpha2: 'ZZ');
-      var c2 = CountryCode.user(alpha2: 'ZZ');
+      final c1 = CountryCode.user(alpha2: 'ZZ');
+      final c2 = CountryCode.user(alpha2: 'ZZ');
 
       expect(identical(c1, c2), isFalse);
       expect(c1, equals(c2));

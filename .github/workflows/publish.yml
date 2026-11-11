@@ -1,0 +1,22 @@
+# Publishes to pub.dev when a version tag is pushed, e.g. v1.2.0.
+# Requires automated publishing enabled on pub.dev (package Admin tab)
+# for this repository with tag pattern `v{{version}}`.
+name: Publish to pub.dev
+
+on:
+  push:
+    tags: ['v[0-9]+.[0-9]+.[0-9]+*']
+
+jobs:
+  ci:
+    uses: ./.github/workflows/ci.yml
+    permissions:
+      contents: read
+
+  publish:
+    needs: ci
+    permissions:
+      id-token: write # Required for OIDC authentication with pub.dev
+    uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
+    with:
+      use-flutter: false
