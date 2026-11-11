@@ -1,4 +1,4 @@
-## [1.1.1]
+## [1.2.0]
 - Minimal Dart SDK version requirement is v3.8
 - `CountryCode.user` and `CountryCode.assign` now validate input at runtime
 (previously `assert`s, stripped in release builds): alpha codes must be exactly
