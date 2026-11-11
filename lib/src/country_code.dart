@@ -42,7 +42,10 @@ class CountryCode {
 
     if (numeric != null && (numeric < 900 || numeric > 999)) {
       throw ArgumentError.value(
-          numeric, 'numeric', 'Should be between 900..999');
+        numeric,
+        'numeric',
+        'Should be between 900..999',
+      );
     }
 
     numeric ??= 0;
@@ -319,7 +322,8 @@ class CountryCode {
     }
 
     _userValues.add(
-        CountryCode.user(alpha2: alpha2, alpha3: alpha3, numeric: numeric));
+      CountryCode.user(alpha2: alpha2, alpha3: alpha3, numeric: numeric),
+    );
 
     return _values.length + _userValues.length - 1;
   }
@@ -353,8 +357,8 @@ class CountryCode {
 
   static int _packAlpha3(List<int> cu) {
     return (cu[0] - _baseChar) << 20 |
-    (cu[1] - _baseChar) << 15 |
-    (cu[2] - _baseChar) << 10;
+        (cu[1] - _baseChar) << 15 |
+        (cu[2] - _baseChar) << 10;
   }
 
   // gets Alpha-2 code units from int
@@ -366,11 +370,15 @@ class CountryCode {
 
   // Validates the shape of user-assigned codes. Range checks are done
   // separately, after packing.
-  static void _validateUserCode(
-      {String? alpha2, String? alpha3, int? numeric}) {
+  static void _validateUserCode({
+    String? alpha2,
+    String? alpha3,
+    int? numeric,
+  }) {
     if (alpha2 == null && alpha3 == null && numeric == null) {
       throw ArgumentError(
-          'At least one of alpha2, alpha3, numeric is required');
+        'At least one of alpha2, alpha3, numeric is required',
+      );
     }
     if (alpha2 != null) {
       _validateAlpha(alpha2, 2, 'alpha2');
@@ -384,7 +392,10 @@ class CountryCode {
     if (code.length != length ||
         code.codeUnits.any((unit) => unit < 0x41 || unit > 0x5a)) {
       throw ArgumentError.value(
-          code, name, 'Must be exactly $length uppercase ASCII letters');
+        code,
+        name,
+        'Must be exactly $length uppercase ASCII letters',
+      );
     }
   }
 
@@ -1181,5 +1192,5 @@ class CountryCode {
     TG, TH, TJ, TK, TL, TM, TN, TO, TR, TT, TV, TW, TZ, UA, UG, UM, US, UY,
     UZ, VA, VC, VE, VG, VI, VN, VU, WF, WS, YE, YT, ZA, ZM, ZW,
   ];
-//GENERATED:END
+  //GENERATED:END
 }

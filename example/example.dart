@@ -21,15 +21,9 @@ void main() {
 
   // You can use CountryCode as map key
   var translations = {
-    'en': {
-      CountryCode.US: 'United States of America',
-    },
-    'fr': {
-      CountryCode.US: 'États-Unis d\'Amérique',
-    },
-    'es': {
-      CountryCode.US: 'Estados Unidos de América',
-    }
+    'en': {CountryCode.US: 'United States of America'},
+    'fr': {CountryCode.US: 'États-Unis d\'Amérique'},
+    'es': {CountryCode.US: 'Estados Unidos de América'},
   };
 
   for (var lang in ['en', 'fr', 'es']) {
